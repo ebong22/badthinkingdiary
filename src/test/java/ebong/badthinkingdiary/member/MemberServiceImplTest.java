@@ -1,20 +1,14 @@
 package ebong.badthinkingdiary.member;
 
 
-import ebong.badthinkingdiary.BadthinkingdiaryApplication;
 import ebong.badthinkingdiary.domain.Member;
-import ebong.badthinkingdiary.domain.MemberRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,9 +16,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+
 //@DataJpaTest
 @Slf4j
+@SpringBootTest
+@Transactional
 class MemberServiceImplTest {
 
 @Autowired

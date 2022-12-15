@@ -1,24 +1,15 @@
 package ebong.badthinkingdiary.domain;
 
 import com.sun.istack.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends AbstractEntity {
 
     @Id
@@ -32,12 +23,13 @@ public class Member extends AbstractEntity {
     private String userPw;
 
     @NotNull
-    private String nickNAme;
+    private String nickName;
 
     private String phoneNumber;
 
     private LocalDate birthDay;
 
+    @Column(columnDefinition = "integer default 0")
     private int loginCount; // 로그인 시도 횟수 ( 5번? / 로그인 성공 하면 0으로 초기화 )
 
     private char status; // 0 잠김(로그인횟수 초과) / 1 정상 / 2 휴면
@@ -49,6 +41,20 @@ public class Member extends AbstractEntity {
     public Member(String userId, String userPw, String nickNAme) {
         this.userId = userId;
         this.userPw = userPw;
-        this.nickNAme = nickNAme;
+        this.nickName = nickName;
+    }
+
+    @Builder
+    public Member(String userId, String userPw, String nickName, String phoneNumber, LocalDate birthDay, char status) {
+        this.userId = userId;
+        this.userPw = userPw;
+        this.nickName = nickName;
+        this.phoneNumber = phoneNumber;
+        this.birthDay = birthDay;
+    }
+
+    public void setSignUpData(){
+        this.status = '1';
+        this.createDate = LocalDateTime.now();
     }
 }

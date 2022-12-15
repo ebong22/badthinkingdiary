@@ -19,6 +19,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Long save(Member member) {
+        member.setSignUpData();
         Member saveMember = memberRepository.save(member);
         return saveMember.getId();
     }

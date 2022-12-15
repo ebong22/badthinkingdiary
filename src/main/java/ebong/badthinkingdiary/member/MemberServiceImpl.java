@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService{
             return memberWrapper.get();
         }
         log.debug("can not find Member");
-        throw new NoSuchElementException("no Member");
+        throw new NoSuchElementException("not exist member");
     }
 
     @Override

@@ -37,19 +37,14 @@ public class MemberController {
      * }
      */
 
-    /**
-     *
-     * @// TODO: 2022/12/11
-     * exceptionHandler 추가하기
-     * => @ControllerAdvice
-     *
-     */
     @GetMapping("/findById/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
+
         try {
             return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberService.findById(id));
         }catch (NoSuchElementException e) {
-            return new ResponseDTO(HttpStatus.NO_CONTENT, false, "can not find Member", null);
+            throw e;
         }
     }
+
 }

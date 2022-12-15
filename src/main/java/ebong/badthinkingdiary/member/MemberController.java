@@ -6,6 +6,8 @@ import ebong.badthinkingdiary.dto.ResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
@@ -19,7 +21,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/save")
-    public ResponseDTO save(@RequestBody MemberSaveDTO saveDto) {
+    public ResponseDTO save(@Validated @RequestBody MemberSaveDTO saveDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.debug("errors={}", bindingResult);
+            throw new IllegalArgumentException("bindingResult has Errors");
+        }
 
         Member member = memberSaveDtoToMember(saveDto);
         memberService.save(member);

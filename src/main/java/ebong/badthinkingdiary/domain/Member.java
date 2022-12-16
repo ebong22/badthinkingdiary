@@ -53,6 +53,9 @@ public class Member extends AbstractEntity {
         this.birthDay = birthDay;
     }
 
+    /**
+     * 회원가입 시 계정 상태, 가입일 세팅
+     */
     public void setSignUpData(){
         this.status = '1';
         this.createDate = LocalDateTime.now();

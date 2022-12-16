@@ -2,6 +2,7 @@ package ebong.badthinkingdiary.member;
 
 import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
+import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
+/**
+ * @TODO now : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
+ * memberToReturnDto 메소드도 만들어서 일괄로 변경해주고
+ */
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -49,14 +54,18 @@ public class MemberController {
      * @param id
      * @return Member
      */
-    @GetMapping("/findById/{id}")
+    @GetMapping("/find/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberService.findById(id));
+    }
 
-        try {
-            return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberService.findById(id));
-        }catch (NoSuchElementException e) {
-            throw e;
-        }
+    
+    // @TODO now : 여기 하는중
+    @PostMapping("/update/{id}")
+    public ResponseDTO update(@PathVariable Long id, @RequestBody MemberUpdateDTO updateDTO) {
+        Member updateMember = memberService.memberUpdate(updateDTO);
+
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
     }
 
 }

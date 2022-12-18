@@ -6,11 +6,13 @@ import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import java.util.List;
 
 public interface MemberService {
-    Long save(Member member);
+    Member save(Member member);
 
     Member findById(Long id);
 
     List<Member> findAll();
 
-    Member memberUpdate(MemberUpdateDTO updateDTO);
+    Member update(MemberUpdateDTO updateDTO);
+
+    void delete(Long id);
 }

@@ -6,6 +6,7 @@ import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,15 +14,15 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service("memberService")
 @AllArgsConstructor
+@Transactional
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
 
     @Override
-    public Long save(Member member) {
+    public Member save(Member member) {
         member.setSignUpData();
-        Member saveMember = memberRepository.save(member);
-        return saveMember.getId();
+        return memberRepository.save(member);
     }
 
     @Override
@@ -44,11 +45,16 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member memberUpdate(MemberUpdateDTO updateDTO) {
+    public Member update(MemberUpdateDTO updateDTO) {
         Member findMember = findById(updateDTO.getId());
         //@TODO now : null로 넘어오는 파라미터도 있을텐데 괜찮은가. getXX할 떄 nullpoint 안나나 흠
         findMember.memberUpdate(updateDTO.getUserPw(), updateDTO.getNickName());
 
         return findMember;
+    }
+
+    @Override
+    public void delete(Long id){
+        memberRepository.delete(findById(id));
     }
 }

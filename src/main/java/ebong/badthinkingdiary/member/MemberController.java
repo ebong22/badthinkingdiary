@@ -11,8 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
-
 /**
  * @TODO now : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
  * memberToReturnDto 메소드도 만들어서 일괄로 변경해주고
@@ -33,8 +31,7 @@ public class MemberController {
             throw new IllegalArgumentException("bindingResult has Errors");
         }
 
-        Member member = memberSaveDtoToMember(saveDto);
-        memberService.save(member);
+        Member member = memberService.save(memberSaveDtoToMember(saveDto));
 
         return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", member);
     }
@@ -60,12 +57,17 @@ public class MemberController {
     }
 
     
-    // @TODO now : 여기 하는중
     @PostMapping("/update/{id}")
     public ResponseDTO update(@PathVariable Long id, @RequestBody MemberUpdateDTO updateDTO) {
-        Member updateMember = memberService.memberUpdate(updateDTO);
+        Member updateMember = memberService.update(updateDTO);
 
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseDTO delete(@PathVariable Long id) {
+        memberService.delete(id);
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), null);
     }
 
 }

@@ -28,13 +28,9 @@ class MemberServiceImplTest {
 
     @Test
     public void saveTest(){
-        Member member = new Member("ServiceTest", "ServiceTest123","ServiceTestNickName");
+        Member member = mockMember();
+        Member findMember =  memberService.save(mockMember());
 
-        Long saveId = memberService.save(member);
-
-        Member findMember = memberService.findById(saveId);
-
-        assertThat(saveId).isEqualTo(findMember.getId());
         assertThat(findMember.getUserId()).isEqualTo(member.getUserId());
         assertThat(findMember.getUserPw()).isEqualTo(member.getUserPw());
 
@@ -48,5 +44,30 @@ class MemberServiceImplTest {
                 .isInstanceOf(NoSuchElementException.class);
 
     }
+
+    @Test
+    public void updateTest(){
+        Member member = memberService.save(mockMember());
+
+        member.memberUpdate("password", "nickname");
+
+        assertThat(member.getUserPw()).isEqualTo("password");
+        assertThat(member.getNickName()).isEqualTo("nickname");
+    }
+
+    @Test
+    public void deleteTest(){
+        Member member = memberService.save(mockMember());
+        memberService.delete(member.getId());
+
+        assertThatThrownBy(() -> memberService.findById(member.getId()))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    private Member mockMember(){
+        return new Member("ServiceTest", "ServiceTest123","ServiceTestNickName");
+    }
+
+
 
 }

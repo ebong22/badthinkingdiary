@@ -1,16 +1,10 @@
-package ebong.badthinkingdiary.member;
+package ebong.badthinkingdiary.apis.member;
 
 import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
-import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

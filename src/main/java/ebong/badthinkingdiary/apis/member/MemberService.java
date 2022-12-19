@@ -1,4 +1,4 @@
-package ebong.badthinkingdiary.member;
+package ebong.badthinkingdiary.apis.member;
 
 import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;

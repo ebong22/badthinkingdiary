@@ -1,21 +1,19 @@
 package ebong.badthinkingdiary.diaryprivate;
 
+import ebong.badthinkingdiary.apis.diaryprivate.DiaryPrivateService;
 import ebong.badthinkingdiary.domain.DiaryListIcon;
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.domain.Member;
-import ebong.badthinkingdiary.member.MemberService;
-import lombok.extern.slf4j.Slf4j;
+import ebong.badthinkingdiary.apis.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 

@@ -1,12 +1,10 @@
 package ebong.badthinkingdiary.member;
 
 
+import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.domain.Member;
-import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 

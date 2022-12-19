@@ -1,9 +1,9 @@
-package ebong.badthinkingdiary.diaryprivate;
+package ebong.badthinkingdiary.apis.diaryprivate;
 
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.dto.DiarySaveDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
-import ebong.badthinkingdiary.member.MemberService;
+import ebong.badthinkingdiary.apis.member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

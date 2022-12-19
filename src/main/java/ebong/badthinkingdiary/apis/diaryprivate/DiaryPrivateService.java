@@ -1,4 +1,4 @@
-package ebong.badthinkingdiary.diaryprivate;
+package ebong.badthinkingdiary.apis.diaryprivate;
 
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 

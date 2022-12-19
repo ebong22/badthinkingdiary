@@ -12,18 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 
 //@DataJpaTest
-@Slf4j
 @SpringBootTest
 @Transactional
 class MemberServiceImplTest {
 
-@Autowired
+    @Autowired
     private MemberService memberService;
 
     @Test

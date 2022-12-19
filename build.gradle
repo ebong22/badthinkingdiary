@@ -25,6 +25,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+	// entity 반환 시 Lazy loading 때문에 오류나는 부분을 해결하기 위한 모듈
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 

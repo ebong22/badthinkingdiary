@@ -25,9 +25,9 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.save(member);
     }
 
+
     @Override
     public Member findById(Long id) {
-
         return memberRepository.findById(id)
                             .orElseThrow(() -> new NoSuchElementException("not exist member"));
 
@@ -39,10 +39,12 @@ public class MemberServiceImpl implements MemberService{
 //        throw new NoSuchElementException("not exist member");
     }
 
+
     @Override
     public List<Member> findAll(){
         return memberRepository.findAll();
     }
+
 
     @Override
     public Member update(MemberUpdateDTO updateDTO) {
@@ -53,8 +55,9 @@ public class MemberServiceImpl implements MemberService{
         return findMember;
     }
 
+
     @Override
     public void delete(Long id){
-        memberRepository.delete(findById(id));
+        memberRepository.deleteById(id);
     }
 }

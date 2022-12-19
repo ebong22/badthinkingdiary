@@ -45,12 +45,11 @@ public class MemberController {
     public ResponseDTO save(@Validated @RequestBody MemberSaveDTO saveDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            log.debug("errors={}", bindingResult);
+            log.debug("bindingResult has Errors = {}", bindingResult);
             throw new IllegalArgumentException("bindingResult has Errors");
         }
 
         Member member = memberService.save(memberSaveDtoToMember(saveDto));
-
         return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", member);
     }
 
@@ -76,7 +75,7 @@ public class MemberController {
      * @param id
      * @return ResponseDTO
      */
-    @Operation(summary = "회원조회", description = "회원 id를 통해 단일 회원을 조회함")
+    @Operation(summary = "회원 조회", description = "회원 id를 통해 단일 회원을 조회함")
     @GetMapping("/find/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberService.findById(id));
@@ -90,11 +89,10 @@ public class MemberController {
      * @param updateDTO
      * @return ResponseDTO
      */
-    @Operation(summary = "회원수정", description = "회원 정보를 수정( 수정 가능 항목 : userPw, nickName )")
+    @Operation(summary = "회원 수정", description = "회원 정보를 수정( 수정 가능 항목 : userPw, nickName )")
     @PostMapping("/update/{id}")
     public ResponseDTO update(@PathVariable Long id, @RequestBody MemberUpdateDTO updateDTO) {
         Member updateMember = memberService.update(updateDTO);
-
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
     }
 
@@ -104,7 +102,7 @@ public class MemberController {
      * @param id
      * @return ResponseDTO
      */
-    @Operation(summary = "회원삭제", description = "회원 id를 통해 단일 회원을 삭제함")
+    @Operation(summary = "회원 삭제", description = "회원 id를 통해 단일 회원을 삭제함")
     @GetMapping("/delete/{id}")
     public ResponseDTO delete(@PathVariable Long id) {
         memberService.delete(id);

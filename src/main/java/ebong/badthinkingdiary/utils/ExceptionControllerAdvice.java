@@ -2,6 +2,7 @@ package ebong.badthinkingdiary.utils;
 
 import ebong.badthinkingdiary.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,5 +30,15 @@ public class ExceptionControllerAdvice {
 
         log.error("[noSuchElementExHandle]\n", e);
         return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "NoSuchElement", null);
+    }
+
+    // @TODO : HTTP STATUS 이게 맞는지..? / 이 오류에 대해 뭔지도 찾아보기.. 내가 의도한대로가 맞는지
+    // 내가 생각한것 : db조회한 데이터가 없을 때 나는 exception
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseDTO emptyResultDataAccessExHandle(EmptyResultDataAccessException e) {
+
+        log.error("[emptyResultDataAccessExHandle]\n", e);
+        return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "emptyResultDataAccess", null);
     }
 }

@@ -1,11 +1,9 @@
 package ebong.badthinkingdiary.domain;
 
-import com.sun.istack.NotNull;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -26,13 +24,13 @@ public class DiaryPrivate extends AbstractEntity {
     @Lob
     private String contents;
 
-    private LocalDate diaryDay;
+    private LocalDateTime diaryDay;
 
     @Enumerated(EnumType.STRING)
     private DiaryListIcon icon;
 
     @Builder
-    public DiaryPrivate(Member member, String title, String contents, LocalDate diaryDay, DiaryListIcon icon) {
+    public DiaryPrivate(Member member, String title, String contents, LocalDateTime diaryDay, DiaryListIcon icon) {
         this.member = member;
         this.title = title;
         this.contents = contents;

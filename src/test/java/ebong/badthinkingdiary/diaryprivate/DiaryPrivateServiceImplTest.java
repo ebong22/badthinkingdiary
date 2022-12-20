@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -49,6 +49,6 @@ class DiaryPrivateServiceImplTest {
     }
 
     private DiaryPrivate mockDiaryPrivate(Member member){
-        return new DiaryPrivate(member, "testTitle", "testContents", LocalDate.now(), DiaryListIcon.ICON_1);
+        return new DiaryPrivate(member, "testTitle", "testContents", LocalDateTime.now(), DiaryListIcon.ICON_1);
     }
 }

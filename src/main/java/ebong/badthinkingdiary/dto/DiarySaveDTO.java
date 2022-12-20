@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class DiarySaveDTO {
@@ -24,7 +24,7 @@ public class DiarySaveDTO {
 
     @Schema(description = "일기 일자")
     @NotNull
-    private LocalDate diaryDay;
+    private LocalDateTime diaryDay;
 
     @Schema(description = "목록 아이콘")
     @NotNull

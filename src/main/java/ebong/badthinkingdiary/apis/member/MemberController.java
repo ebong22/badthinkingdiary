@@ -49,22 +49,6 @@ public class MemberController {
 
 
     /**
-     * MemberSaveDto to Member
-     * @param saveDto
-     * @return Member
-     */
-    public Member memberSaveDtoToMember(MemberSaveDTO saveDto){
-        return Member.builder()
-                .userId(saveDto.getUserId())
-                .userPw(saveDto.getUserPw())
-                .nickName(saveDto.getNickName())
-                .phoneNumber(saveDto.getPhoneNumber())
-                .birthDay(saveDto.getBirthDay())
-                .build();
-    }
-
-
-    /**
      * Member 조회
      * @param id
      * @return ResponseDTO
@@ -103,4 +87,19 @@ public class MemberController {
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), null);
     }
 
+
+    /**
+     * MemberSaveDto to Member
+     * @param saveDto
+     * @return Member
+     */
+    public Member memberSaveDtoToMember(MemberSaveDTO saveDto){
+        return Member.builder()
+                .userId(saveDto.getUserId())
+                .userPw(saveDto.getUserPw())
+                .nickName(saveDto.getNickName())
+                .phoneNumber(saveDto.getPhoneNumber())
+                .birthDay(saveDto.getBirthDay())
+                .build();
+    }
 }

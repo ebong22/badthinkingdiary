@@ -10,10 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 public class DiarySaveDTO {
 
-    @Schema(description = "로그인 멤버")
-    @NotNull
-    private Long memberId;
-
     @Schema(description = "일기 제목")
     @NotNull
     private String title;

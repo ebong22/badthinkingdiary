@@ -1,10 +1,9 @@
-package ebong.badthinkingdiary.apis.diaryprivate;
+package ebong.badthinkingdiary.apis.diarypublic;
 
-import ebong.badthinkingdiary.domain.DiaryPrivate;
+import ebong.badthinkingdiary.domain.DiaryPublic;
 import ebong.badthinkingdiary.dto.DiarySaveDTO;
 import ebong.badthinkingdiary.dto.DiaryViewDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
-import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,45 +19,42 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
-@Tag(name = "다이어리_개인", description = "나쁜마음 일기_개인 일기장")
+@Tag(name = "다이어리_익명 공개 일기", description = "나쁜마음 일기_익명 공개 일기장")
 @RestController
 @AllArgsConstructor
-@RequestMapping("diary/private")
-public class DiaryPrivateController {
+@RequestMapping("diary/public")
+public class DiaryPublicController {
 
-    private final DiaryPrivateService diaryPrivateService;
-    private final MemberService memberService;
+    private final DiaryPublicService diaryPublicService;
     private final CommonUtils commonUtils;
 
 
     /**
-     * DiaryPrivate 조회(단건)
+     * DiaryPublic 조회(단건)
      * @param id
      * @return ResponseDTO
      */
     @Operation(summary = "일기 조회(Id)", description = "일기 id를 통해 단일 일기를 조회함")
     @GetMapping("/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
-        DiaryPrivate diary = diaryPrivateService.findById(id);
-        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), diaryPrivateToDiaryViewDto(diary));
+        DiaryPublic diary = diaryPublicService.findById(id);
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), diaryPublicToDiaryViewDto(diary));
     }
 
 
     /**
-     * DiaryPrivate 조회(다건) : 특정 Member에 해당하는 diary 전체를 조회
-     * @param memberId
+     * DiaryPublic 조회(전체)
      * @return ResponseDTO
      */
-    @Operation(summary = "일기 조회(memberId)", description = "멤버 id를 통해 멤버에 해당하는 일기 전체를 조회함")
-    @GetMapping("/member/{memberId}")
-    public ResponseDTO findByMemberId(@PathVariable Long memberId) {
-        List<DiaryPrivate> diaryList = diaryPrivateService.findByMemberId(memberId);
-
-        if (diaryList.size() > 0) {
+    @Operation(summary = "일기 조회", description = "익명일기 전체를 조회함")
+    @GetMapping("/all")
+    public ResponseDTO findAll() {
+        List<DiaryPublic> diaryList = diaryPublicService.findAll();
+        if(diaryList.size() > 0){
             List<DiaryViewDTO> returnDiaryList = new ArrayList<>();
 
-            for (DiaryPrivate diary : diaryList) { // diary to dto
-                DiaryViewDTO dto = diaryPrivateToDiaryViewDto(diary);
+            for (DiaryPublic diary : diaryList) { // diary to dto
+                DiaryViewDTO dto = diaryPublicToDiaryViewDto(diary);
 
                 if(dto.getOpacity() > 0){
                     returnDiaryList.add(dto);
@@ -71,46 +67,44 @@ public class DiaryPrivateController {
 
 
     /**
-     * DiaryPrivate 저장
+     * DiaryPublic 저장
      * @param saveDto
      * @param bindingResult
-     * @param id
      * @return ResponseDTO
      */
     @Operation(summary = "일기 저장", description = "일기를 저장함")
-    @PostMapping("/save/{id}") // @TODO 시큐리티 : id부분 나중에 로그인된 멤버 정보 서버 안에서 가져올 수 있으면 pathVariable말고 그걸로 처리
-    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long id) {
+    @PostMapping("/save")
+    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.debug("bindingResult has Errors = {}", bindingResult);
             throw new IllegalArgumentException("bindingResult has Errors");
         }
 
-        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, id));
+        DiaryPublic diary = diaryPublicService.save(diarySaveDtoToDiaryPublic(saveDto));
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
     }
 
 
     /**
-     * DiaryPrivate 삭제
+     * DiaryPublic 삭제
      * @param id
      */
     @Operation(summary = "일기 삭제", description = "일기 id를 통해 일기를 삭제함")
     @GetMapping("/delete/{id}")
     public ResponseDTO delete(@PathVariable Long id) {
-        diaryPrivateService.deleteById(id);
+        diaryPublicService.deleteById(id);
         return new ResponseDTO(HttpStatus.OK, true, "delete complete", null);
     }
 
 
     /**
-     * DiarySaveDTO to DiaryPrivate
+     * DiarySaveDTO to diaryPublic
      * @param saveDto
-     * @return DiaryPrivate
+     * @return DiaryPublic
      */
-    private DiaryPrivate diarySaveDtoToDiaryPrivate(DiarySaveDTO saveDto, Long id) {
-        return DiaryPrivate.builder()
-                .member(memberService.findById(id)) // 나중에 dto에서 빼고 현재 로그인된 유저 정보 찾아와도 될 듯
+    private DiaryPublic diarySaveDtoToDiaryPublic(DiarySaveDTO saveDto) {
+        return DiaryPublic.builder()
                 .title(saveDto.getTitle())
                 .contents(saveDto.getContents())
                 .diaryDay(saveDto.getDiaryDay())
@@ -120,17 +114,17 @@ public class DiaryPrivateController {
 
 
     /**
-     * DiaryPrivate to DiaryViewDTO
-     * @param diaryPrivate
+     * DiaryPublic to DiaryViewDTO
+     * @param diaryPublic
      * @return DiaryViewDTO
      */
-    private DiaryViewDTO diaryPrivateToDiaryViewDto(DiaryPrivate diaryPrivate) {
+    private DiaryViewDTO diaryPublicToDiaryViewDto(DiaryPublic diaryPublic) {
         return DiaryViewDTO.builder()
-                .title(diaryPrivate.getTitle())
-                .contents(diaryPrivate.getContents())
-                .diaryDay(diaryPrivate.getDiaryDay())
-                .icon(diaryPrivate.getIcon())
-                .opacity(commonUtils.getOpacity(diaryPrivate.getDiaryDay()))
+                .title(diaryPublic.getTitle())
+                .contents(diaryPublic.getContents())
+                .diaryDay(diaryPublic.getDiaryDay())
+                .icon(diaryPublic.getIcon())
+                .opacity(commonUtils.getOpacity(diaryPublic.getDiaryDay()))
                 .build();
     }
 }

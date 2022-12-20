@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,6 +29,12 @@ public class DiaryPrivateServiceImpl implements DiaryPrivateService{
     public DiaryPrivate findById(Long id) {
         return diaryPrivateRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("not exist diary"));
+    }
+
+
+    @Override
+    public List<DiaryPrivate> findByDiaryDayLessThan(LocalDateTime date){
+        return diaryPrivateRepository.findByDiaryDayLessThan(date);
     }
 
 

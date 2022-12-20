@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -132,5 +134,11 @@ public class DiaryPrivateController {
                 .icon(diaryPrivate.getIcon())
                 .opacity(commonUtils.getOpacity(diaryPrivate.getDiaryDay()))
                 .build();
+    }
+
+
+    @RequestMapping("/test")
+    public List<DiaryPrivate> test (){
+        return diaryPrivateService.findByDiaryDayLessThan(LocalDate.now().atStartOfDay());
     }
 }

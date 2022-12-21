@@ -8,7 +8,7 @@ import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Tag(name = "다이어리_개인", description = "나쁜마음 일기_개인 일기장")
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("diary/private")
 public class DiaryPrivateController {
 

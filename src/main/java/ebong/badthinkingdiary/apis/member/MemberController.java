@@ -6,7 +6,7 @@ import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Member 회원", description = "회원 관련 api 입니다.")
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("member")
 public class MemberController {
 

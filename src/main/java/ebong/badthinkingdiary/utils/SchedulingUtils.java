@@ -39,10 +39,7 @@ public class SchedulingUtils {
     public void deleteDiaryPrivate(){
         log.debug("[deleteDiaryPrivate] Scheduling start ===============");
 
-        LocalDateTime baseDate = LocalDate.now().minusDays(6).atStartOfDay();
-        log.debug("[deleteDiaryPrivate] baseDate = {}", baseDate);
-
-        List<DiaryPrivate> deleteList = diaryPrivateService.findByDiaryDayLessThan(baseDate);
+        List<DiaryPrivate> deleteList = diaryPrivateService.findByDiaryDayLessThan(getStartDate());
 
         if( deleteList.size() > 0){
             for (DiaryPrivate diary : deleteList) {
@@ -63,10 +60,7 @@ public class SchedulingUtils {
     public void deleteDiaryPublic(){
         log.debug("[deleteDiaryPublic] Scheduling start ===============");
 
-        LocalDateTime baseDate = LocalDate.now().minusDays(6).atStartOfDay();
-        log.debug("[deleteDiaryPublic] baseDate = {}", baseDate);
-
-        List<DiaryPublic> deleteList = diaryPublicService.findByDiaryDayLessThan(baseDate);
+        List<DiaryPublic> deleteList = diaryPublicService.findByDiaryDayLessThan(getStartDate());
 
         if( deleteList.size() > 0){
             for (DiaryPublic diary : deleteList) {
@@ -75,6 +69,15 @@ public class SchedulingUtils {
             }
         }
         log.debug("[deleteDiaryPublic] Scheduling end ===============");
+    }
+
+
+    /**
+     * Diary 삭제 기준일 계산 ( 6일 전 00:00 )
+     * @return diary delete date
+     */
+    private LocalDateTime getStartDate() {
+        return LocalDate.now().minusDays(6).atStartOfDay();
     }
 
 }

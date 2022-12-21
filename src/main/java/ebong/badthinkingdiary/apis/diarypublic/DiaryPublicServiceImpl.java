@@ -3,7 +3,7 @@ package ebong.badthinkingdiary.apis.diarypublic;
 import ebong.badthinkingdiary.domain.DiaryPublic;
 import ebong.badthinkingdiary.domain.DiaryPublicRepository;
 import ebong.badthinkingdiary.utils.CommonUtils;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @Slf4j
 @Service("diaryPublicService")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional
 public class DiaryPublicServiceImpl implements DiaryPublicService {
 

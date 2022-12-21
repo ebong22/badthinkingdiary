@@ -5,7 +5,7 @@ import ebong.badthinkingdiary.apis.diaryprivate.DiaryPrivateServiceImpl;
 import ebong.badthinkingdiary.apis.diarypublic.DiaryPublicService;
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.domain.DiaryPublic;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SchedulingUtils {
 
     private final DiaryPublicService diaryPublicService;

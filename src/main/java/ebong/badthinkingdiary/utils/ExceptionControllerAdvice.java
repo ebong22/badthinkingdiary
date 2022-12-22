@@ -4,6 +4,8 @@ import ebong.badthinkingdiary.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -51,5 +53,24 @@ public class ExceptionControllerAdvice {
 
         log.error("[emptyResultDataAccessExHandle]\n", e);
         return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "emptyResultDataAccess", null);
+    }
+
+
+
+    // @TODO 리팩토링 :  request 잘못되면 나는 오류같은데 BODY 없는거 말고도 문제가 있을 것 같으니 message는 수정 필요
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseDTO httpMessageNotReadableExHandle(HttpMessageNotReadableException e) {
+
+        log.error("[httpMessageNotReadableExHandle]\n", e);
+        return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "Required request body is missing", null);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseDTO badCredentialsExHandle(BadCredentialsException e) {
+
+        log.error("[badCredentialsExHandle]\n", e);
+        return new ResponseDTO(HttpStatus.UNAUTHORIZED, false, "Credentials failed", null);
     }
 }

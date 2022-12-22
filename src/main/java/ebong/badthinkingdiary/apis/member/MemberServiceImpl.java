@@ -47,6 +47,13 @@ public class MemberServiceImpl implements MemberService{
 
 
     @Override
+    public Member findByUserId(String userId){
+        return memberRepository.findByUserId(userId)
+                .orElseThrow( () -> new NoSuchElementException("not exist member"));
+    }
+
+
+    @Override
     public Member update(MemberUpdateDTO updateDTO) {
         Member findMember = findById(updateDTO.getId());
         //@TODO now : null로 넘어오는 파라미터도 있을텐데 괜찮은가. getXX할 떄 nullpoint 안나나 흠

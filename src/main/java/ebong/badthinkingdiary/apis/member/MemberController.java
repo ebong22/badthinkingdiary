@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+
+    private final PasswordEncoder passwordEncoder;
 
 
     /**
@@ -96,7 +99,7 @@ public class MemberController {
     public Member memberSaveDtoToMember(MemberSaveDTO saveDto){
         return Member.builder()
                 .userId(saveDto.getUserId())
-                .userPw(saveDto.getUserPw())
+                .userPw( passwordEncoder.encode(saveDto.getUserPw()) ) // 비밀번호 암호화
                 .nickName(saveDto.getNickName())
                 .phoneNumber(saveDto.getPhoneNumber())
                 .birthDay(saveDto.getBirthDay())

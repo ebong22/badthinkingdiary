@@ -2,6 +2,7 @@ package ebong.badthinkingdiary.utils;
 
 import ebong.badthinkingdiary.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -63,7 +64,7 @@ public class ExceptionControllerAdvice {
     public ResponseDTO httpMessageNotReadableExHandle(HttpMessageNotReadableException e) {
 
         log.error("[httpMessageNotReadableExHandle]\n", e);
-        return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "Required request body is missing", null);
+        return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "bad request", null);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -72,5 +73,14 @@ public class ExceptionControllerAdvice {
 
         log.error("[badCredentialsExHandle]\n", e);
         return new ResponseDTO(HttpStatus.UNAUTHORIZED, false, "Credentials failed", null);
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateKeyException.class)
+    public ResponseDTO duplicateKeyExHandle(DuplicateKeyException e) {
+
+        log.error("[duplicateKeyExHandle]\n", e);
+        return new ResponseDTO(HttpStatus.BAD_REQUEST, false, "already exist", null);
     }
 }

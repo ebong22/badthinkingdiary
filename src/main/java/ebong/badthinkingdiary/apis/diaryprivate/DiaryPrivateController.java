@@ -82,11 +82,7 @@ public class DiaryPrivateController {
     @Operation(summary = "일기 저장", description = "일기를 저장함")
     @PostMapping("/save/{id}") // @TODO 시큐리티 : id부분 나중에 로그인된 멤버 정보 서버 안에서 가져올 수 있으면 pathVariable말고 그걸로 처리
     public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long id) {
-
-        if (bindingResult.hasErrors()) {
-            log.debug("bindingResult has Errors = {}", bindingResult);
-            throw new IllegalArgumentException("bindingResult has Errors");
-        }
+        commonUtils.returnError(bindingResult);
 
         DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, id));
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);

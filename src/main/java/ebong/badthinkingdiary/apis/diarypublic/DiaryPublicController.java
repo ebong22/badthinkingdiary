@@ -75,11 +75,7 @@ public class DiaryPublicController {
     @Operation(summary = "일기 저장", description = "일기를 저장함")
     @PostMapping("/save")
     public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            log.debug("bindingResult has Errors = {}", bindingResult);
-            throw new IllegalArgumentException("bindingResult has Errors");
-        }
+        commonUtils.returnError(bindingResult);
 
         DiaryPublic diary = diaryPublicService.save(diarySaveDtoToDiaryPublic(saveDto));
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);

@@ -2,6 +2,7 @@ package ebong.badthinkingdiary.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,6 +29,13 @@ public class CommonUtils {
             }
         }
         return 0; // 매일 0시 스케줄링으로 지워주긴 할거지만 혹시 남아있는 data가 있다면 0으로 처리
+    }
+
+    public void returnError(BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            log.debug("bindingResult has Errors = {}", bindingResult);
+            throw new IllegalArgumentException("bindingResult has Errors");
+        }
     }
 
 }

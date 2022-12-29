@@ -4,6 +4,7 @@ import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
+import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-
     private final PasswordEncoder passwordEncoder;
+    private final CommonUtils commonUtils;
 
 
     /**
@@ -40,11 +41,7 @@ public class MemberController {
     @Operation(summary = "회원가입", description = "회원가입")
     @PostMapping("/save")
     public ResponseDTO save(@Validated @RequestBody MemberSaveDTO saveDto, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            log.debug("bindingResult has Errors = {}", bindingResult);
-            throw new IllegalArgumentException("bindingResult has Errors");
-        }
+        commonUtils.returnError(bindingResult);
 
         Member member = memberService.save(memberSaveDtoToMember(saveDto));
         return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", member);

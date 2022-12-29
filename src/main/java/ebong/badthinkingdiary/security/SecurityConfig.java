@@ -64,9 +64,15 @@ public class SecurityConfig{
 
                     //URL 관리
                     .authorizeRequests()
-                    .antMatchers("/member/save", "/login").permitAll()
-                    .antMatchers("/h2-console/**", "/swagger-ui/index.html").permitAll()
-                    .anyRequest().authenticated()
+                    .antMatchers("/member/save"
+                                    , "/login").permitAll()
+                    .antMatchers("/h2-console/**"
+                                    , "/swagger-resources/**"
+                                    , "/swagger-ui/**"
+                                    , "/v3/api-docs"
+                                    , "/webjars/**").permitAll()
+                    .anyRequest().permitAll()
+//                    .anyRequest().authenticated()
                 .and()
 
                     // JwtAuthenticationFilter를 먼저 적용

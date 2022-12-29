@@ -1,10 +1,10 @@
 package ebong.badthinkingdiary.apis.member;
 
-import ebong.badthinkingdiary.domain.Member;
-import ebong.badthinkingdiary.domain.MemberRepository;
+import ebong.badthinkingdiary.domain.*;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +18,14 @@ import java.util.NoSuchElementException;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
+    private final MemberRoleRepository memberRoleRepository;
 
     @Override
     public Member save(Member member) {
+        if (findByUserId(member.getUserId()) != null) {
+            throw new DuplicateKeyException("already exist");
+        }
+
         member.setSignUpData();
         return memberRepository.save(member);
     }
@@ -30,13 +35,6 @@ public class MemberServiceImpl implements MemberService{
     public Member findById(Long id) {
         return memberRepository.findById(id)
                             .orElseThrow(() -> new NoSuchElementException("not exist member"));
-
-//        Optional<Member> memberWrapper = memberRepository.findById(id);
-//        if (memberWrapper.isPresent()) {
-//            return memberWrapper.get();
-//        }
-//        log.debug("can not find Member");
-//        throw new NoSuchElementException("not exist member");
     }
 
 
@@ -66,5 +64,10 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void delete(Long id){
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public List<MemberRole> getMemberRole(Long id) {
+        return memberRoleRepository.findByMemberId(id);
     }
 }

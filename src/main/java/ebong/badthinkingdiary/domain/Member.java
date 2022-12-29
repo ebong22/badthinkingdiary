@@ -26,12 +26,14 @@ public class Member extends AbstractEntity implements UserDetails {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String userId;
 
     @NotNull
     private String userPw;
 
     @NotNull
+    @Column(unique = true)
     private String nickName;
 
     private String phoneNumber;
@@ -168,12 +170,12 @@ public class Member extends AbstractEntity implements UserDetails {
     }
 
     //@TODO 시큐리티 : 권한 가져오는 메소드 나중에 DB에서 권한가져오든 뭐든 수정해야함
-    private Collection<SimpleGrantedAuthority> getRoles(List<String> roles) {
-        roles.add("USER"); // 임시 : USER 권한으로 테스트
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+//    private Collection<SimpleGrantedAuthority> getRoles(List<String> roles) {
+//        roles.add("USER"); // 임시 : USER 권한으로 테스트
+//        return roles.stream()
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+//    }
 
     // @TODO 임시 (추후 삭제)
     private Collection<SimpleGrantedAuthority> getRoles() {

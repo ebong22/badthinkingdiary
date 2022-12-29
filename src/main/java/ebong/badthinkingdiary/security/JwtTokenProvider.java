@@ -1,5 +1,6 @@
 package ebong.badthinkingdiary.security;
 
+import ebong.badthinkingdiary.domain.RoleList;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -60,7 +61,7 @@ public class JwtTokenProvider {
 //                .signWith(SignatureAlgorithm.ES256, secretKey) // 암호화 알고리즘, 암호키
 //                .compact();
 //    }
-    public String createToken(Authentication authenticate, List<String> roles) {
+    public String createToken(Authentication authenticate, List<RoleList> roles) {
         Claims claims = Jwts.claims().setSubject(authenticate.getName());
         claims.put("roles", roles);
 
@@ -116,7 +117,7 @@ public class JwtTokenProvider {
     public boolean validationToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-            
+
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;

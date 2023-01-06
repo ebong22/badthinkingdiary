@@ -31,7 +31,6 @@ public class RoleController {
     private final MemberService memberService;
     private final CommonUtils commonUtils;
 
-    // @TODO 1227 진행중 : ROLE 관련 메소드 및 entity 만들기 -> 다하면 시큐리티에 ROLE 적용
     // @TODO 리팩토링 지금 ENUM / DB 둘다로 해놨는데 정확히 뭐로할지 정할 필요가 있음
 
 

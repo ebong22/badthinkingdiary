@@ -1,22 +1,13 @@
 package ebong.badthinkingdiary.security;
 
-import ebong.badthinkingdiary.utils.CookieUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -40,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
 
         if (token != null && jwtTokenProvider.validationToken(token)) {
             // 토큰에서 유저정보 받아 authentication 객체 생성
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            Authentication authentication = jwtTokenProvider.getAuthentication(token, 'A');
             // SecurityContext에 authentication 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

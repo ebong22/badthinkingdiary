@@ -19,7 +19,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
 
-        // @TODO now : name 지정해준 부분이 작동을 안하는 것 같음 (task-n 이라는 이름으로 작동 중)
+        // @TODO : name 지정해준 부분이 작동을 안하는 것 같음 (task-n 이라는 이름으로 작동 중)
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
         threadPoolTaskScheduler.setThreadGroupName("Scheduler thread pool");
         threadPoolTaskScheduler.setThreadNamePrefix("Scheduler-thread-");

@@ -47,7 +47,7 @@ public class DiaryPublicServiceImpl implements DiaryPublicService {
     }
 
 
-    // @Todo now :여기서 안쓰고 스케줄러에서 바로 diaryPublicRepository 가져다가 써도 되는데 그건 생각해보기
+    // @Todonow :여기서 안쓰고 스케줄러에서 바로 diaryPublicRepository 가져다가 써도 되는데 그건 생각해보기
     @Override
     public void deleteById(Long id) {
         diaryPublicRepository.deleteById(id);

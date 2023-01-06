@@ -1,6 +1,9 @@
 package ebong.badthinkingdiary.apis.member;
 
+import ebong.badthinkingdiary.apis.role.RoleService;
 import ebong.badthinkingdiary.domain.Member;
+import ebong.badthinkingdiary.domain.MemberRole;
+import ebong.badthinkingdiary.dto.MemberDTO;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
@@ -15,8 +18,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
- * @TODO now : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
+ * @TODOnow : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
  * memberToReturnDto 메소드도 만들어서 일괄로 변경해주고
  */
 
@@ -28,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final CommonUtils commonUtils;
 
@@ -56,7 +62,8 @@ public class MemberController {
     @Operation(summary = "회원 조회", description = "회원 id를 통해 단일 회원을 조회함")
     @GetMapping("/find/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
-        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberService.findById(id));
+        MemberDTO returnMember = memberToMemberDto(memberService.findById(id), memberService.getMemberRole(id));
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), returnMember);
     }
 
 
@@ -101,5 +108,16 @@ public class MemberController {
                 .phoneNumber(saveDto.getPhoneNumber())
                 .birthDay(saveDto.getBirthDay())
                 .build();
+    }
+
+    public MemberDTO memberToMemberDto(Member member, List<MemberRole> roleList) {
+        return MemberDTO.builder()
+                    .id(member.getId())
+                    .userId(member.getUserId())
+                    .nickName(member.getNickName())
+                    .phoneNumber(member.getPhoneNumber())
+                    .birthDay(member.getBirthDay())
+                    .authority(roleList)
+                    .build();
     }
 }

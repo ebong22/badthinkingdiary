@@ -2,7 +2,6 @@ package ebong.badthinkingdiary.apis.member;
 
 import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.domain.MemberRole;
-import ebong.badthinkingdiary.domain.RoleList;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 
 import java.util.List;
@@ -21,4 +20,6 @@ public interface MemberService {
     void delete(Long id);
 
     List<MemberRole> getMemberRole(Long id);
+
+    List<String> getRoleFromMemberRoles(List<MemberRole> memberRoles);
 }

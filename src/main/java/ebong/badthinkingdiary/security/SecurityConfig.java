@@ -1,17 +1,11 @@
 package ebong.badthinkingdiary.security;
 
-import ebong.badthinkingdiary.utils.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -65,14 +59,16 @@ public class SecurityConfig{
                     //URL 관리
                     .authorizeRequests()
                     .antMatchers("/member/save"
-                                    , "/login").permitAll()
+                                    , "/login"
+                                    , "/refresh"
+                                    ).permitAll()
                     .antMatchers("/h2-console/**"
                                     , "/swagger-resources/**"
                                     , "/swagger-ui/**"
                                     , "/v3/api-docs"
                                     , "/webjars/**").permitAll()
-                    .anyRequest().permitAll()
-//                    .anyRequest().authenticated()
+//                    .anyRequest().permitAll()
+                    .anyRequest().authenticated()
                 .and()
 
                     // JwtAuthenticationFilter를 먼저 적용

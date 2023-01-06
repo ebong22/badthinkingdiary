@@ -2,24 +2,16 @@ package ebong.badthinkingdiary.domain;
 
 import com.sun.istack.NotNull;
 import lombok.*;
-import org.springframework.lang.Nullable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends AbstractEntity implements UserDetails {
+public class Member extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -113,76 +105,4 @@ public class Member extends AbstractEntity implements UserDetails {
     }
 
 
-    /**
-     *  UserDetails 관련
-     *  @TODO 시큐리티 : getPassword / getUsername 맞추기 위해 field명 password / username으로 바꾸는것 고려해보기
-     */
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
-    }
-
-    @Override
-    public String getPassword() {
-        return userPw;
-    }
-
-    @Override
-    public String getUsername() {
-        return userId;
-    }
-
-    /**
-     * @TODO 시큐리티 : 아래 인증부분 현재 status 밖에 없어서 동일하게 처리했는데 좀더 상세화 해야할지 생각해보기
-     */
-    // status : 0 잠김(로그인횟수 초과) / 1 정상 / 2 휴면
-    @Override
-    public boolean isAccountNonExpired() { // 사용자 계정이 만료되었는지 여부
-        if(this.status == '1'){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() { // 사용자가 잠겼는지 잠금 해제되었는지
-        if(this.status == '1'){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() { // 사용자의 자격 증명(암호)이 만료되었는지 여부
-        if(this.status == '1'){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() { // 사용자의 활성화 또는 비활성화 여부
-        if(this.status == '1'){
-            return true;
-        }
-        return false;
-    }
-
-    //@TODO 시큐리티 : 권한 가져오는 메소드 나중에 DB에서 권한가져오든 뭐든 수정해야함
-//    private Collection<SimpleGrantedAuthority> getRoles(List<String> roles) {
-//        roles.add("USER"); // 임시 : USER 권한으로 테스트
-//        return roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
-
-    // @TODO 임시 (추후 삭제)
-    private Collection<SimpleGrantedAuthority> getRoles() {
-        List<String> roles = new ArrayList<>();
-        roles.add("USER"); // 임시 : USER 권한으로 테스트
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
 }

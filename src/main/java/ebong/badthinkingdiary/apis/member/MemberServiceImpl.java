@@ -8,6 +8,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -54,7 +55,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member update(MemberUpdateDTO updateDTO) {
         Member findMember = findById(updateDTO.getId());
-        //@TODO now : null로 넘어오는 파라미터도 있을텐데 괜찮은가. getXX할 떄 nullpoint 안나나 흠
+        //@TODOnow : null로 넘어오는 파라미터도 있을텐데 괜찮은가. getXX할 떄 nullpoint 안나나 흠
         findMember.memberUpdate(updateDTO.getUserPw(), updateDTO.getNickName());
 
         return findMember;
@@ -69,5 +70,21 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public List<MemberRole> getMemberRole(Long id) {
         return memberRoleRepository.findByMemberId(id);
+    }
+
+
+    @Override
+    public List<String> getRoleFromMemberRoles( List<MemberRole> memberRoles ){
+        if (memberRoles.isEmpty()) {
+            throw new NullPointerException("memberRoles is empty");
+        }
+
+        List<String> roles = new ArrayList<>();
+        for (MemberRole m : memberRoles) {
+            RoleList name = m.getRole().getName();
+            roles.add( m.getRole().getName().name() );
+        }
+
+        return roles;
     }
 }

@@ -1,16 +1,17 @@
 package ebong.badthinkingdiary.utils;
 
 import ebong.badthinkingdiary.apis.diaryprivate.DiaryPrivateService;
-import ebong.badthinkingdiary.apis.diaryprivate.DiaryPrivateServiceImpl;
 import ebong.badthinkingdiary.apis.diarypublic.DiaryPublicService;
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.domain.DiaryPublic;
+import ebong.badthinkingdiary.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ public class SchedulingUtils {
 
     private final DiaryPublicService diaryPublicService;
     private final DiaryPrivateService diaryPrivateService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      *  비동기 구현 원하는 메소드에는
@@ -78,6 +80,21 @@ public class SchedulingUtils {
      */
     private LocalDateTime getStartDate() {
         return LocalDate.now().minusDays(6).atStartOfDay();
+    }
+
+
+    //@'TODONOW 테스트 해봐야 함
+    /**
+     * 만료된 refreshToken DB에서 삭제
+     */
+    @Scheduled(cron = "0 0/5 * * * *")
+    @Async
+    public void expireRefreshTokenLessThanNow(){
+        log.debug("[expireRefreshTokenLessThanNow] Scheduling start ===============");
+
+        jwtTokenProvider.expireRefreshTokenLessThan(Instant.now());
+
+        log.debug("[expireRefreshTokenLessThanNow] Scheduling end ===============");
     }
 
 }

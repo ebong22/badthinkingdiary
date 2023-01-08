@@ -17,6 +17,10 @@ public class Member extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "refreshToken_id")
+    private RefreshToken refreshToken;
+
     @NotNull
     @Column(unique = true)
     private String userId;

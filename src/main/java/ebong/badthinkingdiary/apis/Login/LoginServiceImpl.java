@@ -1,5 +1,7 @@
 package ebong.badthinkingdiary.apis.Login;
 
+import ebong.badthinkingdiary.domain.Member;
+import ebong.badthinkingdiary.domain.MemberRepository;
 import ebong.badthinkingdiary.domain.RefreshToken;
 import ebong.badthinkingdiary.domain.RefreshTokenRepository;
 import ebong.badthinkingdiary.dto.TokenDTO;
@@ -20,6 +22,7 @@ import java.util.NoSuchElementException;
 public class LoginServiceImpl implements LoginService{
 
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
 
@@ -94,12 +97,22 @@ public class LoginServiceImpl implements LoginService{
     @Override
     public void saveRefreshToken(String refreshToken){
         Instant expireDate = jwtTokenProvider.getExpiration(refreshToken, 'R').toInstant();
+        Member loginMember = memberRepository.findByUserId(jwtTokenProvider.getUserPk(refreshToken, 'R'))
+                .orElseThrow(()-> new NoSuchElementException("not exist member"));
+
 
         RefreshToken saveToken = RefreshToken.builder()
                 .refreshToken(refreshToken)
+                .member(loginMember)
                 .expireDate(expireDate)
                 .build();
 
         refreshTokenRepository.save(saveToken);
+    }
+
+
+    @Override
+    public void deleteRefreshTokenByMemberId(Long memberId){
+        refreshTokenRepository.deleteByMemberId(memberId);
     }
 }

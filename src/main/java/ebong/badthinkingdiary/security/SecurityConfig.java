@@ -60,6 +60,7 @@ public class SecurityConfig{
                     .authorizeRequests()
                     .antMatchers("/member/save"
                                     , "/login"
+                                    , "/logout"
                                     , "/refresh"
                                     ).permitAll()
                     .antMatchers("/h2-console/**"

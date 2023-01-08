@@ -1,6 +1,7 @@
 package ebong.badthinkingdiary.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.io.IOException;
  *  Requeset에 포함된 cookie에서 token을 추출하고, token의 payload에 존재하는 email(id??)을 바탕으로 인증에 필요한 토큰을 생성함 (UsernamePasswordToken)
  *  => JWT 토큰과 관련 X / 시큐리티 기본 AuthenticationFilter 역할을 하는 filter인가봄
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRequestFilter : 한 요청당 단일 실행을 목표로 하는 filter

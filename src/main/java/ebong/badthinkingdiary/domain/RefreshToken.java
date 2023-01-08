@@ -20,12 +20,17 @@ public class RefreshToken {
     @Column(nullable = false)
     private String refreshToken;
 
+    //@TODONOW 이거 뭔가 매핑 잘 안되는중 계속 null 로 들어가는 중 ....*************
+    @OneToOne(mappedBy = "refreshToken")
+    private Member member;
+
     @Column(nullable = false)
     private Instant expireDate;
 
     @Builder
-    public RefreshToken(String refreshToken, Instant expireDate) {
+    public RefreshToken(String refreshToken, Member member, Instant expireDate) {
         this.refreshToken = refreshToken;
+        this.member = member;
         this.expireDate = expireDate;
     }
 

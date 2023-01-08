@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * JWT 토큰 생성 및 검증 모듈
@@ -56,7 +57,6 @@ public class JwtTokenProvider {
     /**
      * JWT token 생성
      * @param authenticate
-     * @param roles
      * @param tokenType
      * @return
      */
@@ -162,8 +162,12 @@ public class JwtTokenProvider {
 
 //            Jwts.parser().setSigningKey(getEncryptKey(tokenType)).parseClaimsJws(token).getBody().getExpiration();
 
+            RefreshToken refreshtoken = refreshTokenRepository.findByMember_userId(claims.getBody().getSubject())
+                    .orElseThrow(() -> new IllegalArgumentException("logout member") );
+
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
+            log.error("validationToken error =",e);
             return false;
         }
     }
@@ -195,6 +199,7 @@ public class JwtTokenProvider {
         if ( findRefreshToken.getExpireDate().isBefore(Instant.now()) ){
             throw new IllegalArgumentException("expired refreshToken");
         }
+
         Authentication authentication = getAuthentication(refreshToken, 'R');
 
         // 새로운 토큰 생성

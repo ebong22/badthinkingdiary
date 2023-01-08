@@ -23,12 +23,19 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Member save(Member member) {
-        if (findByUserId(member.getUserId()) != null) {
+//        if (findByUserId(member.getUserId()) != null) {
+//            throw new DuplicateKeyException("already exist");
+//        }
+
+        try {
+            findByUserId(member.getUserId());
             throw new DuplicateKeyException("already exist");
+
+        } catch(NoSuchElementException exception){
+            member.setSignUpData();
+            return memberRepository.save(member);
         }
 
-        member.setSignUpData();
-        return memberRepository.save(member);
     }
 
 

@@ -37,7 +37,7 @@ class DiaryPrivateServiceImplTest {
         List<DiaryPrivate> diarys = diaryPrivateService.findByMemberId(member.getId());
 //        System.out.println("diarys =================" + diarys.toString());
 //
-//        for(DiaryPrivate diary : diarys){
+//        for (DiaryPrivate diary : diarys) {
 //            System.out.println("diary =================" + diary.toString());
 //        }
 

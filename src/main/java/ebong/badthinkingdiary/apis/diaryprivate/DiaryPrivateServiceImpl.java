@@ -19,34 +19,31 @@ public class DiaryPrivateServiceImpl implements DiaryPrivateService{
 
     private final DiaryPrivateRepository diaryPrivateRepository;
 
+
     @Override
     public DiaryPrivate save(DiaryPrivate diaryPrivate){
         return diaryPrivateRepository.save(diaryPrivate);
     }
 
+    @Override
+    public void delete(Long id) {
+        diaryPrivateRepository.deleteById(id);
+    }
 
     @Override
-    public DiaryPrivate findById(Long id) {
+    public DiaryPrivate find(Long id) {
         return diaryPrivateRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("not exist diary"));
     }
-
 
     @Override
     public List<DiaryPrivate> findByDiaryDayLessThan(LocalDateTime date){
         return diaryPrivateRepository.findByDiaryDayLessThan(date);
     }
 
-
     @Override
     public List<DiaryPrivate> findByMemberId(Long memberId) {
         return diaryPrivateRepository.findByMemberId(memberId);
-    }
-
-
-    @Override
-    public void deleteById(Long id) {
-        diaryPrivateRepository.deleteById(id);
     }
 
 }

@@ -32,6 +32,13 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    // 암호화키
+    private final String secretKey;
+    private final String secretKey4Refresh;
+    // 토큰 유지시간
+    private final long TOKEN_VALID_MILLISECOND;
+    private final long REFRESH_TOKEN_VALID_MILLISECOND;
+
     public JwtTokenProvider( UserDetailsService userDetailsService
                             , RefreshTokenRepository refreshTokenRepository
                             , @Value("${spring.jwt.secret}") String secretKey
@@ -45,12 +52,6 @@ public class JwtTokenProvider {
         this.TOKEN_VALID_MILLISECOND = Long.parseLong(tokenExpirationAccess);
         this.REFRESH_TOKEN_VALID_MILLISECOND = Long.parseLong(tokenExpirationRefresh);
     }
-    // 암호화키
-    private final String secretKey;
-    private final String secretKey4Refresh;
-    // 토큰 유지시간
-    private final long TOKEN_VALID_MILLISECOND;
-    private final long REFRESH_TOKEN_VALID_MILLISECOND;
 
 
     /**
@@ -70,25 +71,24 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-
     /**
-     * tokenType에 따른 암호화키 return
+     * tokenType에 따른 암호화키 return<br>
+     * tokenType : A = access, R = refresh
      * @param tokenType
      * @return encryptKey
      */
     private String getEncryptKey(char tokenType) {
-        // access 토큰 / refresh 토큰 암호화 키 구분
         String encryptKey = tokenType == 'A' ? secretKey : tokenType == 'R' ? secretKey4Refresh : null;
 
-        if( encryptKey == null ){
+        if (encryptKey == null) {
             throw new IllegalArgumentException("Bad tokenType");
         }
         return encryptKey;
     }
 
-
     /**
-     * tokenType에 따른 만료 시간 return
+     * tokenType에 따른 만료 시간 return<br>
+     * tokenType : A = access, R = refresh
      * @param tokenType
      * @return expire time
      */
@@ -97,12 +97,11 @@ public class JwtTokenProvider {
         Date expireTime = tokenType == 'A' ? new Date(now.getTime() + TOKEN_VALID_MILLISECOND)
                   : tokenType == 'R' ? new Date(now.getTime() + REFRESH_TOKEN_VALID_MILLISECOND) : null;
 
-        if( expireTime == null ){
+        if (expireTime == null) {
             throw new IllegalArgumentException("Bad tokenType");
         }
         return expireTime;
     }
-
 
     /**
      * JWT token으로 인증 정보 조회
@@ -115,16 +114,14 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    
     /**
-     * JWT token에서 회원정보 추출
+     * JWT token에서 회원정보 추출(userId)
      * @param token
-     * @return
+     * @return userId
      */
     public String getUserPk(String token, char tokenType) {
         return Jwts.parser().setSigningKey(getEncryptKey(tokenType)).parseClaimsJws(token).getBody().getSubject();
     }
-
 
     /**
      * JWT token에서 만료일 추출
@@ -136,7 +133,6 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(getEncryptKey(tokenType)).parseClaimsJws(token).getBody().getExpiration();
     }
 
-
     /**
      * RequestHeader에서  token 파싱<br>
      * X-AUTH_TOKEN : JWT token
@@ -147,7 +143,6 @@ public class JwtTokenProvider {
         return request.getHeader("X-AUTH-TOKEN");
     }
 
-    
     /**
      * ACCESS token 유효성 + 만료일자 확인
      * @param jwtToken
@@ -156,32 +151,17 @@ public class JwtTokenProvider {
     public boolean validationToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-
             log.debug("claims = {}", claims); //@TODONOW 나중에 삭제
-
-//            Jwts.parser().setSigningKey(getEncryptKey(tokenType)).parseClaimsJws(token).getBody().getExpiration();
 
             RefreshToken refreshtoken = refreshTokenRepository.findByMember_userId(claims.getBody().getSubject())
                     .orElseThrow(() -> new IllegalArgumentException("logout member") );
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            log.error("validationToken error =",e);
+            log.error("validationToken error =", e);
             return false;
         }
     }
-
-
-    /**
-     * @TODOnow 여기하는중 ******************
-     * 리프레시 토큰 발급 하고 액세스토큰 만료 시 /refresh로 요청하여 검증 후
-     * 유효한 리프레시 토큰이면 액세스토큰과 리프레시 토큰 재발급해줘야 함
-     * 
-     * 만료된 refresh 토큰 삭제 처리
-     * 특정 토킅 즉시 만료처리
-     *
-     */
-
 
     /**
      * refresh token 검증 및 재발급
@@ -190,23 +170,22 @@ public class JwtTokenProvider {
      * @throws RuntimeException
      */
     public String reissueRefreshToken(String refreshToken) throws RuntimeException{
-        // refresh token을 디비의 그것과 비교해보기
+        // refresh DB조회
         RefreshToken findRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new NoSuchElementException("not exist refreshToken"));
 
         // 토큰 만료기간 체크
-        if ( findRefreshToken.getExpireDate().isBefore(Instant.now())) {
+        if (findRefreshToken.getExpireDate().isBefore(Instant.now())) {
             throw new IllegalArgumentException("expired refreshToken");
         }
 
-        Authentication authentication = getAuthentication(refreshToken, 'R');
-
         // 새로운 토큰 생성
+        Authentication authentication = getAuthentication(refreshToken, 'R');
         String newRefreshToken = createToken(authentication, 'R');
         findRefreshToken.updateToken(newRefreshToken, Instant.now().plusMillis(REFRESH_TOKEN_VALID_MILLISECOND));
+
         return newRefreshToken;
     }
-
 
     /**
      * 만료일 지난 refreshToken 삭제

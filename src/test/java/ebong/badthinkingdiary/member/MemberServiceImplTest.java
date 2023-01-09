@@ -36,7 +36,7 @@ class MemberServiceImplTest {
     public void canNotFindMemberTest() {
         List<Member> members = memberService.findAll();
 
-        assertThatThrownBy(() -> memberService.findById(members.size() + 1L))
+        assertThatThrownBy(() -> memberService.find(members.size() + 1L))
                 .isInstanceOf(NoSuchElementException.class);
 
     }
@@ -56,7 +56,7 @@ class MemberServiceImplTest {
         Member member = memberService.save(mockMember());
         memberService.delete(member.getId());
 
-        assertThatThrownBy(() -> memberService.findById(member.getId()))
+        assertThatThrownBy(() -> memberService.find(member.getId()))
                 .isInstanceOf(NoSuchElementException.class);
     }
 

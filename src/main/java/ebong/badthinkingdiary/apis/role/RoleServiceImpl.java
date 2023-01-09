@@ -20,27 +20,25 @@ public class RoleServiceImpl implements RoleService{
 
 
     @Override
-    public Role findByName(RoleList name) {
+    public Role find(RoleList name) {
         return roleRepository.findByName(name);
     }
 
     @Override
     public void save(Role role){
-        if(findByName(role.getName()) != null) {
+        if (find(role.getName()) != null) {
             throw new DuplicateKeyException("already exist");
         }
         roleRepository.save(role);
-
     }
 
     @Override
     public void saveMemberRole(MemberRole memberRole) {
-
         if (memberRole.getRole() == null) {
             throw new IllegalArgumentException("not exist role");
         }
 
-        List<MemberRole> membersRole = findMemberRoleById(memberRole.getMember().getId());
+        List<MemberRole> membersRole = findMemberRole(memberRole.getMember().getId());
         if (membersRole != null) {
             for (MemberRole m : membersRole) {
                 if (m.getRole().getName() == memberRole.getRole().getName()) {
@@ -48,11 +46,11 @@ public class RoleServiceImpl implements RoleService{
                 }
             }
         }
-
         memberRoleRepository.save(memberRole);
     }
 
-    public List<MemberRole> findMemberRoleById(Long memberId){
+    @Override
+    public List<MemberRole> findMemberRole(Long memberId){
         return memberRoleRepository.findByMemberId(memberId);
     }
 

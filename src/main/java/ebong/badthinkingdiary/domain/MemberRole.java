@@ -1,7 +1,6 @@
 package ebong.badthinkingdiary.domain;
 
 import lombok.AccessLevel;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

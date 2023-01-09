@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Component
 public class CommonUtils {
 
-
     /**
      * 일기 농도 계산<br>
      * 7일동안 옅어지는 일기의 농도 계산<br>
@@ -23,14 +22,18 @@ public class CommonUtils {
         long elapsedTime = Duration.between( diaryDay, LocalDateTime.now() ).getSeconds();
         int secondsOfDay = 60 * 60 * 24; // sec : 1일 86400 ( 60 X 60 X 24 X 1 )
 
-        for(int i = 0; i < 7; i++) {
-            if (elapsedTime >= i && elapsedTime < secondsOfDay * (i + 1) ) {
+        for (int i = 0; i < 7; i++) {
+            if (elapsedTime >= i && elapsedTime < secondsOfDay * (i + 1)) {
                 return 100 - (i * 15);
             }
         }
         return 0; // 매일 0시 스케줄링으로 지워주긴 할거지만 혹시 남아있는 data가 있다면 0으로 처리
     }
 
+    /**
+     * BeanValidation Error 리턴
+     * @param bindingResult
+     */
     public void returnError(BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             log.debug("bindingResult has Errors = {}", bindingResult);

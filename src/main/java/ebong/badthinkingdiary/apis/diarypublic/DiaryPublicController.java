@@ -41,7 +41,6 @@ public class DiaryPublicController {
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), diaryPublicToDiaryViewDto(diary));
     }
 
-
     /**
      * DiaryPublic 조회(전체)
      * @return ResponseDTO
@@ -56,7 +55,7 @@ public class DiaryPublicController {
             for (DiaryPublic diary : diaryList) { // diary to dto
                 DiaryViewDTO dto = diaryPublicToDiaryViewDto(diary);
 
-                if(dto.getOpacity() > 0){
+                if (dto.getOpacity() > 0) {
                     returnDiaryList.add(dto);
                 }
             }
@@ -64,7 +63,6 @@ public class DiaryPublicController {
         }
         throw new NoSuchElementException("diaryList empty");
     }
-
 
     /**
      * DiaryPublic 저장
@@ -81,7 +79,6 @@ public class DiaryPublicController {
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
     }
 
-
     /**
      * DiaryPublic 삭제
      * @param id
@@ -89,10 +86,9 @@ public class DiaryPublicController {
     @Operation(summary = "일기 삭제", description = "일기 id를 통해 일기를 삭제함")
     @GetMapping("/delete/{id}")
     public ResponseDTO delete(@PathVariable Long id) {
-        diaryPublicService.deleteById(id);
+        diaryPublicService.delete(id);
         return new ResponseDTO(HttpStatus.OK, true, "delete complete", null);
     }
-
 
     /**
      * DiarySaveDTO to diaryPublic
@@ -108,7 +104,6 @@ public class DiaryPublicController {
                 .build();
     }
 
-
     /**
      * DiaryPublic to DiaryViewDTO
      * @param diaryPublic
@@ -123,4 +118,5 @@ public class DiaryPublicController {
                 .opacity(commonUtils.getOpacity(diaryPublic.getDiaryDay()))
                 .build();
     }
+
 }

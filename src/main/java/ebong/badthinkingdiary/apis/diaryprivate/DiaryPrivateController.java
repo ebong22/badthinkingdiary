@@ -1,10 +1,10 @@
 package ebong.badthinkingdiary.apis.diaryprivate;
 
+import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.dto.DiarySaveDTO;
 import ebong.badthinkingdiary.dto.DiaryViewDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
-import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,8 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -41,10 +39,9 @@ public class DiaryPrivateController {
     @Operation(summary = "일기 조회(Id)", description = "일기 id를 통해 단일 일기를 조회함")
     @GetMapping("/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
-        DiaryPrivate diary = diaryPrivateService.findById(id);
+        DiaryPrivate diary = diaryPrivateService.find(id);
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), diaryPrivateToDiaryViewDto(diary));
     }
-
 
     /**
      * DiaryPrivate 조회(다건) : 특정 Member에 해당하는 diary 전체를 조회
@@ -71,7 +68,6 @@ public class DiaryPrivateController {
         throw new NoSuchElementException("diaryList empty");
     }
 
-
     /**
      * DiaryPrivate 저장
      * @param saveDto
@@ -88,7 +84,6 @@ public class DiaryPrivateController {
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
     }
 
-
     /**
      * DiaryPrivate 삭제
      * @param id
@@ -96,10 +91,9 @@ public class DiaryPrivateController {
     @Operation(summary = "일기 삭제", description = "일기 id를 통해 일기를 삭제함")
     @GetMapping("/delete/{id}")
     public ResponseDTO delete(@PathVariable Long id) {
-        diaryPrivateService.deleteById(id);
+        diaryPrivateService.delete(id);
         return new ResponseDTO(HttpStatus.OK, true, "delete complete", null);
     }
-
 
     /**
      * DiarySaveDTO to DiaryPrivate
@@ -108,14 +102,13 @@ public class DiaryPrivateController {
      */
     private DiaryPrivate diarySaveDtoToDiaryPrivate(DiarySaveDTO saveDto, Long id) {
         return DiaryPrivate.builder()
-                .member(memberService.findById(id)) // 나중에 dto에서 빼고 현재 로그인된 유저 정보 찾아와도 될 듯
+                .member(memberService.find(id)) // 나중에 dto에서 빼고 현재 로그인된 유저 정보 찾아와도 될 듯
                 .title(saveDto.getTitle())
                 .contents(saveDto.getContents())
                 .diaryDay(saveDto.getDiaryDay())
                 .icon(saveDto.getIcon())
                 .build();
     }
-
 
     /**
      * DiaryPrivate to DiaryViewDTO
@@ -132,9 +125,4 @@ public class DiaryPrivateController {
                 .build();
     }
 
-
-    @RequestMapping("/test")
-    public List<DiaryPrivate> test (){
-        return diaryPrivateService.findByDiaryDayLessThan(LocalDate.now().atStartOfDay());
-    }
 }

@@ -22,7 +22,6 @@ public class Role extends AbstractEntity{
 
 //    private String description;
 
-
     public Role(RoleList name) {
         this.name = name;
     }

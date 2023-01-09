@@ -43,15 +43,14 @@ public class SchedulingUtils {
 
         List<DiaryPrivate> deleteList = diaryPrivateService.findByDiaryDayLessThan(getStartDate());
 
-        if( deleteList.size() > 0){
+        if (deleteList.size() > 0) {
             for (DiaryPrivate diary : deleteList) {
                 log.debug("delete diary id = {}, title= {}", diary.getId(), diary.getTitle());
-                diaryPrivateService.deleteById(diary.getId());
+                diaryPrivateService.delete(diary.getId());
             }
         }
         log.debug("[deleteDiaryPrivate] Scheduling end ===============");
     }
-
 
     /**
      * DiaryPublic 삭제 대상 삭제 : 작성 이후 7일 지난 일기 (8일째 되는 DATA부터 삭제)
@@ -64,15 +63,14 @@ public class SchedulingUtils {
 
         List<DiaryPublic> deleteList = diaryPublicService.findByDiaryDayLessThan(getStartDate());
 
-        if( deleteList.size() > 0){
+        if (deleteList.size() > 0) {
             for (DiaryPublic diary : deleteList) {
                 log.debug("delete diary id = {}, title= {}", diary.getId(), diary.getTitle());
-                diaryPublicService.deleteById(diary.getId());
+                diaryPublicService.delete(diary.getId());
             }
         }
         log.debug("[deleteDiaryPublic] Scheduling end ===============");
     }
-
 
     /**
      * Diary 삭제 기준일 계산 ( 6일 전 00:00 )
@@ -82,8 +80,6 @@ public class SchedulingUtils {
         return LocalDate.now().minusDays(6).atStartOfDay();
     }
 
-
-    //@'TODONOW 테스트 해봐야 함
     /**
      * 만료된 refreshToken DB에서 삭제
      */

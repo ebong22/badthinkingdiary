@@ -51,7 +51,6 @@ public class Member extends AbstractEntity{
 //    private List<String> roles; // 나중에 String 말고 Role 만들어주기
     // 여기까지가 권한 관련 ====================================
 
-
     public Member(String userId, String userPw, String nickName) {
         this.userId     = userId;
         this.userPw     = userPw;
@@ -81,15 +80,14 @@ public class Member extends AbstractEntity{
      * @param nickName
      */
     public void memberUpdate(String userPw, String nickName){
-        if( userPw != null &&  !userPw.isEmpty() ){
+        if (userPw != null &&  !userPw.isEmpty()) {
             this.userPw = userPw;
         }
 
-        if( nickName != null &&  !nickName.isEmpty() ){
+        if (nickName != null &&  !nickName.isEmpty()) {
             this.nickName = nickName;
         }
     }
-
 
     /**
      * 로그인 횟수 카운팅
@@ -108,6 +106,5 @@ public class Member extends AbstractEntity{
     public void setStatus(char status){
         this.status = status;
     }
-
 
 }

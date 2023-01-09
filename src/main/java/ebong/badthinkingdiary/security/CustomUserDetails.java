@@ -24,18 +24,15 @@ public class CustomUserDetails implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public String getPassword() {
         return member.getUserPw();
     }
 
-
     @Override
     public String getUsername() {
         return member.getUserId();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -45,7 +42,6 @@ public class CustomUserDetails implements UserDetails {
         return false;
     }
 
-
     @Override
     public boolean isAccountNonLocked() {
         if (member.getStatus() == '1') {
@@ -54,21 +50,20 @@ public class CustomUserDetails implements UserDetails {
         return false;
     }
 
-
     @Override
     public boolean isCredentialsNonExpired() {
-        if(member.getStatus() == '1'){
+        if (member.getStatus() == '1') {
             return true;
         }
         return false;
     }
-
 
     @Override
     public boolean isEnabled() {
-        if(member.getStatus() == '1'){
+        if (member.getStatus() == '1') {
             return true;
         }
         return false;
     }
+
 }

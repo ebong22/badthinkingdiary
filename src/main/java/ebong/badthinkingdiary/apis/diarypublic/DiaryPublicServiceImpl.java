@@ -27,6 +27,11 @@ public class DiaryPublicServiceImpl implements DiaryPublicService {
         return diaryPublicRepository.save(diaryPublic);
     }
 
+    // @Todonow :여기서 안쓰고 스케줄러에서 바로 diaryPublicRepository 가져다가 써도 되는데 그건 생각해보기
+    @Override
+    public void delete(Long id) {
+        diaryPublicRepository.deleteById(id);
+    }
 
     @Override
     public DiaryPublic findById(Long id) {
@@ -34,23 +39,14 @@ public class DiaryPublicServiceImpl implements DiaryPublicService {
                 .orElseThrow(() -> new NoSuchElementException("not exitst diary"));
     }
 
-
     @Override
     public List<DiaryPublic> findAll(){
         return diaryPublicRepository.findAll();
     }
 
-
     @Override
     public List<DiaryPublic> findByDiaryDayLessThan(LocalDateTime date){
         return diaryPublicRepository.findByDiaryDayLessThan(date);
-    }
-
-
-    // @Todonow :여기서 안쓰고 스케줄러에서 바로 diaryPublicRepository 가져다가 써도 되는데 그건 생각해보기
-    @Override
-    public void deleteById(Long id) {
-        diaryPublicRepository.deleteById(id);
     }
 
 }

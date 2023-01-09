@@ -53,7 +53,6 @@ public class MemberController {
         return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", member);
     }
 
-
     /**
      * Member 조회
      * @param id
@@ -62,10 +61,9 @@ public class MemberController {
     @Operation(summary = "회원 조회", description = "회원 id를 통해 단일 회원을 조회함")
     @GetMapping("/find/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
-        MemberDTO returnMember = memberToMemberDto(memberService.findById(id), memberService.getMemberRole(id));
+        MemberDTO returnMember = memberToMemberDto(memberService.find(id), memberService.getMemberRole(id));
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), returnMember);
     }
-
 
     /**
      * Member 수정<br>
@@ -81,7 +79,6 @@ public class MemberController {
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
     }
 
-
     /**
      * Member 삭제
      * @param id
@@ -93,7 +90,6 @@ public class MemberController {
         memberService.delete(id);
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), null);
     }
-
 
     /**
      * MemberSaveDto to Member
@@ -110,6 +106,12 @@ public class MemberController {
                 .build();
     }
 
+    /**
+     * Member to MemberDto
+     * @param member
+     * @param roleList
+     * @return MemberDTO
+     */
     public MemberDTO memberToMemberDto(Member member, List<MemberRole> roleList) {
         return MemberDTO.builder()
                     .id(member.getId())

@@ -26,8 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("not exist member : [" + usrId + "]"));
 
         List<MemberRole> memberRoles = memberService.getMemberRole(member.getId());
-
-        return new CustomUserDetails(member, memberService.getRoleFromMemberRoles(memberRoles));
+        return new CustomUserDetails(member, memberService.memberRolesToList(memberRoles));
     }
 
 }

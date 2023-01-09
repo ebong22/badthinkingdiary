@@ -56,7 +56,6 @@ public class LoginController {
         TokenDTO token = loginService.createToken4Login(authenticate);
 
         return new ResponseDTO(HttpStatus.OK, true, "login success", token);
-
     }
 
     @GetMapping("/logout/{memberId}")
@@ -65,7 +64,6 @@ public class LoginController {
         return new ResponseDTO(HttpStatus.OK, true, "logout success", null);
     }
 
-
     /**
      * refresh token 검증 및 token 재발급
      * @param refreshToken
@@ -73,7 +71,6 @@ public class LoginController {
      */
     @PostMapping("/refresh")
     public ResponseDTO refreshToken(@RequestBody String refreshToken){
-
         RefreshToken token = loginService.findRefreshToken(refreshToken);
 
         if (token.getExpireDate().isBefore(Instant.now())) {
@@ -85,15 +82,13 @@ public class LoginController {
         return new ResponseDTO(HttpStatus.OK, true, "refresh success", reissueToken);
     }
 
-
     /**
      * userId를 통해 권한 조회
      * @param userId
      * @return member Role list
      */
     private List<RoleList> getRoleLists(String userId) {
-
-        List<MemberRole> memberRoles =  memberService.getMemberRole(memberService.findByUserId(userId).getId());
+        List<MemberRole> memberRoles =  memberService.getMemberRole(memberService.find(userId).getId());
         List<RoleList> roles = new ArrayList<>();
 
         for (MemberRole m : memberRoles) {

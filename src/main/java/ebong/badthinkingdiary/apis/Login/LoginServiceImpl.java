@@ -26,23 +26,12 @@ public class LoginServiceImpl implements LoginService{
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    /**
-     * refresh token 조회
-     * @param refreshToken
-     * @return
-     */
     @Override
     public RefreshToken findRefreshToken(String refreshToken){
         return refreshTokenRepository.findByRefreshToken(refreshToken)
                         .orElseThrow(()-> new NoSuchElementException(("not exist refreshToken")));
     }
 
-
-    /**
-     * token 생성 및 refresh token 저장 (로그인 시)
-     * @param authenticate
-     * @return
-     */
     @Override
     public TokenDTO createToken4Login(Authentication authenticate) {
 
@@ -54,7 +43,6 @@ public class LoginServiceImpl implements LoginService{
         return tokenDto;
     }
 
-
     @Override
     public void logout(Long memberId){
         refreshTokenRepository.findByMemberId(memberId)
@@ -63,12 +51,6 @@ public class LoginServiceImpl implements LoginService{
         refreshTokenRepository.deleteByMemberId(memberId);
     }
 
-    /**
-     * reissue token <br>
-     * refreseh token 검증 및 토큰 재발급
-     * @param refreshToken
-     * @return
-     */
     @Override
     public TokenDTO refresh(RefreshToken refreshToken){
         Authentication authenticate = jwtTokenProvider.getAuthentication(refreshToken.getRefreshToken(), 'R');
@@ -83,25 +65,6 @@ public class LoginServiceImpl implements LoginService{
         return tokenDto;
     }
 
-
-
-    /**
-     * token 생성
-     * @param authenticate
-     * @return
-     */
-    public TokenDTO createToken( Authentication authenticate ){
-        String accessToken = jwtTokenProvider.createToken(authenticate, 'A');
-        String refreshToken = jwtTokenProvider.createToken(authenticate, 'R');
-        return new TokenDTO(accessToken, refreshToken);
-    }
-
-
-
-    /**
-     * refreshtoken DB 저장
-     * @param refreshToken
-     */
     @Override
     public void saveRefreshToken(String refreshToken){
         Instant expireDate = jwtTokenProvider.getExpiration(refreshToken, 'R').toInstant();
@@ -119,6 +82,12 @@ public class LoginServiceImpl implements LoginService{
                     .build();
             refreshTokenRepository.save(saveToken);
         }
+    }
+
+    public TokenDTO createToken( Authentication authenticate ){
+        String accessToken = jwtTokenProvider.createToken(authenticate, 'A');
+        String refreshToken = jwtTokenProvider.createToken(authenticate, 'R');
+        return new TokenDTO(accessToken, refreshToken);
     }
 
 }

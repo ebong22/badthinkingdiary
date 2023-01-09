@@ -31,8 +31,8 @@ public class RoleController {
     private final MemberService memberService;
     private final CommonUtils commonUtils;
 
-    // @TODO 리팩토링 지금 ENUM / DB 둘다로 해놨는데 정확히 뭐로할지 정할 필요가 있음
 
+    // @TODO 리팩토링 지금 ENUM / DB 둘다로 해놨는데 정확히 뭐로할지 정할 필요가 있음
 
     /**
      * member에 권한 부여
@@ -45,15 +45,14 @@ public class RoleController {
         commonUtils.returnError(bindingResult);
 
         log.debug("MemberRoleDTO = {}", roleDTO.toString());
+
         List<MemberRole> memberRoles = memberRoleDtoToMemberRole(roleDTO);
         for (MemberRole m : memberRoles) {
-
             roleService.saveMemberRole(m);
         }
 
         return new ResponseDTO(HttpStatus.OK, true, "save complete", null);
     }
-
 
     /**
      * 권한 생성
@@ -71,7 +70,6 @@ public class RoleController {
         return new ResponseDTO(HttpStatus.OK, true, "role create complete", null);
     }
 
-
     /**
      * MemberRoleDto to MemberRole
      * @param roleDTO
@@ -80,15 +78,16 @@ public class RoleController {
     public List<MemberRole> memberRoleDtoToMemberRole(MemberRoleDTO roleDTO){
         List<RoleList> roles = roleDTO.getRoles();
 
-        if( !roles.isEmpty()){
+        if (!roles.isEmpty()) {
             List<MemberRole> memberRoles = new ArrayList<>();
-            Member member = memberService.findById(roleDTO.getUserId());
+            Member member = memberService.find(roleDTO.getUserId());
 
             for (RoleList r : roles) {
-                memberRoles.add ( new MemberRole(member, roleService.findByName(r)) );
+                memberRoles.add ( new MemberRole(member, roleService.find(r)) );
             }
             return memberRoles;
         }
         throw new NullPointerException("roleDTO.getRoles() is null");
     }
+
 }

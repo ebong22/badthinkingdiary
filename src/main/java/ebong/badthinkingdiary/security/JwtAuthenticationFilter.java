@@ -15,8 +15,6 @@ import java.io.IOException;
 
 /*
  *  http 요청이 들어오면 가장 먼저 거치게 되는 filter
- *  Requeset에 포함된 cookie에서 token을 추출하고, token의 payload에 존재하는 email(id??)을 바탕으로 인증에 필요한 토큰을 생성함 (UsernamePasswordToken)
- *  => JWT 토큰과 관련 X / 시큐리티 기본 AuthenticationFilter 역할을 하는 filter인가봄
  */
 @Slf4j
 @Component
@@ -40,8 +38,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
 
         chain.doFilter(request, response);
     }
+
 }
-
-
-
-// https://github.com/bbarbs/spring-boot-jwt/blob/master/src/main/java/com/auth/core/security/JwtAuthorizationFilter.java 여기에 다른 BasicAuthenticationFilter 상속받아서 하는것도 있음

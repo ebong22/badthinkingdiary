@@ -60,8 +60,10 @@ public class SecurityConfig{
                     .authorizeRequests()
                     .antMatchers("/member/save"
                                     , "/login"
-                                    , "/logout"
+                                    , "/logout/*"
                                     , "/refresh"
+                                    , "/role/save/member-role" // @TODOnow 추후 삭제
+                                    , "/role/save/new-role" // @TODOnow 추후 삭제
                                     ).permitAll()
                     .antMatchers("/h2-console/**"
                                     , "/swagger-resources/**"

@@ -61,15 +61,7 @@ public class LoginController {
 
     @GetMapping("/logout/{memberId}")
     public ResponseDTO logout(@PathVariable Long memberId) {
-        /**
-         * @TODOnow Logout 구현중(하단 방법 참고)
-         * 현재 리프레시 토큰만 저장하고있으니
-         * 리프레시 토큰 날려주기
-         * and 액세스토큰이 1분이긴하지만 살아있는 채로 요청할 수 있으니
-         * 요청시 refresh token 테이블에서 해당 멤버로 가지고 있는 refresh token이 있는지 확인 후
-         * 없다면 로그아웃 된 것으로 판단하고 인가 XXXXXX
-         */
-        loginService.deleteRefreshTokenByMemberId(memberId);
+        loginService.logout(memberId);
         return new ResponseDTO(HttpStatus.OK, true, "logout success", null);
     }
 
@@ -84,7 +76,7 @@ public class LoginController {
 
         RefreshToken token = loginService.findRefreshToken(refreshToken);
 
-        if(token.getExpireDate().isBefore(Instant.now())){
+        if (token.getExpireDate().isBefore(Instant.now())) {
             throw new IllegalArgumentException("expired refreshToken");
         }
 

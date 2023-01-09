@@ -39,7 +39,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        if(member.getStatus() == '1'){
+        if (member.getStatus() == '1') {
             return true;
         }
         return false;
@@ -48,7 +48,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        if(member.getStatus() == '1'){
+        if (member.getStatus() == '1') {
             return true;
         }
         return false;

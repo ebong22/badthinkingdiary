@@ -17,8 +17,9 @@ public class Member extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "refreshToken_id")
+//    @OneToOne
+//    @JoinColumn(name = "refreshToken_id")
+    @OneToOne(mappedBy = "member")
     private RefreshToken refreshToken;
 
     @NotNull

@@ -15,7 +15,7 @@ public interface LoginService {
 
     TokenDTO createToken4Login(Authentication authenticate);
 
-    TokenDTO refresh(RefreshToken refreshToken);
+    void logout(Long memberId);
 
-    void deleteRefreshTokenByMemberId(Long memberId);
+    TokenDTO refresh(RefreshToken refreshToken);
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service("roleService")
@@ -36,6 +35,11 @@ public class RoleServiceImpl implements RoleService{
 
     @Override
     public void saveMemberRole(MemberRole memberRole) {
+
+        if (memberRole.getRole() == null) {
+            throw new IllegalArgumentException("not exist role");
+        }
+
         List<MemberRole> membersRole = findMemberRoleById(memberRole.getMember().getId());
         if (membersRole != null) {
             for (MemberRole m : membersRole) {

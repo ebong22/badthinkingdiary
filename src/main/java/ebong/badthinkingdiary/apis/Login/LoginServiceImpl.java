@@ -55,6 +55,14 @@ public class LoginServiceImpl implements LoginService{
     }
 
 
+    @Override
+    public void logout(Long memberId){
+        refreshTokenRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("not login member"));
+
+        refreshTokenRepository.deleteByMemberId(memberId);
+    }
+
     /**
      * reissue token <br>
      * refreseh token 검증 및 토큰 재발급
@@ -100,19 +108,17 @@ public class LoginServiceImpl implements LoginService{
         Member loginMember = memberRepository.findByUserId(jwtTokenProvider.getUserPk(refreshToken, 'R'))
                 .orElseThrow(()-> new NoSuchElementException("not exist member"));
 
-
-        RefreshToken saveToken = RefreshToken.builder()
-                .refreshToken(refreshToken)
-                .member(loginMember)
-                .expireDate(expireDate)
-                .build();
-
-        refreshTokenRepository.save(saveToken);
+        if (loginMember.getRefreshToken() != null) {
+            loginMember.getRefreshToken().updateToken(refreshToken, expireDate);
+        }
+        else {
+            RefreshToken saveToken = RefreshToken.builder()
+                    .refreshToken(refreshToken)
+                    .member(loginMember)
+                    .expireDate(expireDate)
+                    .build();
+            refreshTokenRepository.save(saveToken);
+        }
     }
 
-
-    @Override
-    public void deleteRefreshTokenByMemberId(Long memberId){
-        refreshTokenRepository.deleteByMemberId(memberId);
-    }
 }

@@ -20,7 +20,6 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * JWT 토큰 생성 및 검증 모듈
@@ -196,7 +195,7 @@ public class JwtTokenProvider {
                 .orElseThrow(() -> new NoSuchElementException("not exist refreshToken"));
 
         // 토큰 만료기간 체크
-        if ( findRefreshToken.getExpireDate().isBefore(Instant.now()) ){
+        if ( findRefreshToken.getExpireDate().isBefore(Instant.now())) {
             throw new IllegalArgumentException("expired refreshToken");
         }
 

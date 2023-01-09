@@ -62,7 +62,7 @@ public class DiaryPrivateController {
             for (DiaryPrivate diary : diaryList) { // diary to dto
                 DiaryViewDTO dto = diaryPrivateToDiaryViewDto(diary);
 
-                if(dto.getOpacity() > 0){
+                if (dto.getOpacity() > 0) {
                     returnDiaryList.add(dto);
                 }
             }

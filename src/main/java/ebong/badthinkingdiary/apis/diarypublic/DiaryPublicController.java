@@ -50,7 +50,7 @@ public class DiaryPublicController {
     @GetMapping("/all")
     public ResponseDTO findAll() {
         List<DiaryPublic> diaryList = diaryPublicService.findAll();
-        if(diaryList.size() > 0){
+        if (diaryList.size() > 0) {
             List<DiaryViewDTO> returnDiaryList = new ArrayList<>();
 
             for (DiaryPublic diary : diaryList) { // diary to dto

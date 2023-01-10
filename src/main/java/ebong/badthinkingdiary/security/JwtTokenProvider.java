@@ -2,10 +2,7 @@ package ebong.badthinkingdiary.security;
 
 import ebong.badthinkingdiary.domain.RefreshToken;
 import ebong.badthinkingdiary.domain.RefreshTokenRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -157,9 +154,18 @@ public class JwtTokenProvider {
                     .orElseThrow(() -> new IllegalArgumentException("logout member") );
 
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            log.error("validationToken error =", e);
-            return false;
+        } catch (SecurityException | MalformedJwtException e) {
+            log.error("[validationToken error] wrong Jwt token =", e);
+            throw e;
+        } catch (ExpiredJwtException e) {
+            log.error("[validationToken error] Expired Jwt token =", e);
+            throw e;
+        } catch (UnsupportedJwtException e) {
+            log.error("[validationToken error] Unsupported Jwt token =", e);
+            throw e;
+        } catch (IllegalArgumentException e) {
+            log.error("[validationToken error] IllegalArgument Jwt token =", e);
+            throw e;
         }
     }
 
@@ -180,8 +186,8 @@ public class JwtTokenProvider {
         }
 
         // 새로운 토큰 생성
-        Authentication authentication = getAuthentication(refreshToken, 'R');
-        String newRefreshToken = createToken(authentication, 'R');
+        Authentication authenticate = getAuthentication(refreshToken, 'R');
+        String newRefreshToken = createToken(authenticate, 'R');
         findRefreshToken.updateToken(newRefreshToken, Instant.now().plusMillis(REFRESH_TOKEN_VALID_MILLISECOND));
 
         return newRefreshToken;

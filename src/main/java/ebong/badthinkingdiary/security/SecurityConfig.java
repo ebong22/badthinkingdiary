@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     // 암호화에 필요한 passwordEncoder bean 등록
     @Bean
@@ -29,13 +31,13 @@ public class SecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
         return http
                     //h2 콘솔 사용
-                    .csrf().disable().headers().frameOptions().disable()
+                    .csrf().disable().headers().frameOptions().disable() // @TODOnow 추후삭제?
                 .and()
-
                     //세션 사용 안함
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()// @TODOnow accessDeniedHandler 설정 확인
+                    .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
                 .and()
-
                     //URL 관리
                     .authorizeRequests()
                     .antMatchers("/member/save"
@@ -51,10 +53,12 @@ public class SecurityConfig{
                                     , "/v3/api-docs"
                                     , "/webjars/**").permitAll()
 //                    .anyRequest().permitAll()
+//                    .antMatchers("/member/find/*").hasAuthority("USER") // 인가처리할 때 이렇게 하면 됨
                     .anyRequest().authenticated()
                 .and()
                     // JwtAuthenticationFilter 적용
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 

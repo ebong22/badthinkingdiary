@@ -31,9 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter { // OncePerRe
 
         if (token != null && jwtTokenProvider.validationToken(token)) {
             // 토큰에서 유저정보 받아 authentication 객체 생성
-            Authentication authentication = jwtTokenProvider.getAuthentication(token, 'A');
+            Authentication authenticate = jwtTokenProvider.getAuthentication(token, 'A');
             // SecurityContext에 authentication 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
         }
 
         chain.doFilter(request, response);

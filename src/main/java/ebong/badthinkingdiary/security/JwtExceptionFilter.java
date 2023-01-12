@@ -23,6 +23,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         }
         catch (JwtException e) {
+            log.error("[JwtExceptionFilter] JwtException", e);
+
             ObjectMapper objectMapper = new ObjectMapper();
             ResponseDTO responseDto = new ResponseDTO(HttpStatus.FORBIDDEN, true, "Access denied", null);
 

@@ -1,5 +1,6 @@
 package ebong.badthinkingdiary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -17,8 +18,7 @@ public class Member extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @OneToOne
-//    @JoinColumn(name = "refreshToken_id")
+    @JsonIgnore
     @OneToOne(mappedBy = "member")
     private RefreshToken refreshToken;
 

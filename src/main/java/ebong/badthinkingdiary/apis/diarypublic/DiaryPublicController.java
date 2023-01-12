@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Tag(name = "다이어리_익명 공개 일기", description = "나쁜마음 일기_익명 공개 일기장")
@@ -61,7 +60,7 @@ public class DiaryPublicController {
             }
             return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), returnDiaryList);
         }
-        throw new NoSuchElementException("diaryList empty");
+        return new ResponseDTO(HttpStatus.OK, true, "diaryList empty", null);
     }
 
     /**

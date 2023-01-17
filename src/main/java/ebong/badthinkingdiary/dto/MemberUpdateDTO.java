@@ -12,6 +12,9 @@ public class MemberUpdateDTO {
     @NotBlank
     private Long    id;
 
+    @Schema(description = "로그인 아이디")
+    private String  userId;
+
     @Schema(description = "로그인 비밀번호")
     private String  userPw;
 

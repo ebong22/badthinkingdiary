@@ -44,8 +44,6 @@ public class SecurityConfig{
                                     , "/login"
                                     , "/logout/*"
                                     , "/refresh"
-                                    , "/role/save/member-role" // @TODOnow 추후 삭제
-                                    , "/role/save/new-role" // @TODOnow 추후 삭제
                                     ).permitAll()
                     .antMatchers("/h2-console/**"
                                     , "/swagger-resources/**"
@@ -53,7 +51,14 @@ public class SecurityConfig{
                                     , "/v3/api-docs"
                                     , "/webjars/**").permitAll()
 //                    .anyRequest().permitAll()
-//                    .antMatchers("/member/find/*").hasAuthority("USER") // 인가처리할 때 이렇게 하면 됨
+                    .antMatchers(   "/role/save/member-role"
+                                    , "/role/save/new-role"
+                                    , "/member/find/*"
+                                    , "/member/delete/*"
+                                    , "/member/update/*"
+                                    , "/diary/private/delete/*"
+                                    , "/diary/public/delete/*"
+                                ).hasAuthority("ADMIN") // 인가처리할 때 이렇게 하면 됨
                     .anyRequest().authenticated()
                 .and()
                     // JwtAuthenticationFilter 적용

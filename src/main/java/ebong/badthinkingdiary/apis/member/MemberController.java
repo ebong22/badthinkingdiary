@@ -7,18 +7,21 @@ import ebong.badthinkingdiary.dto.MemberDTO;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
+import ebong.badthinkingdiary.security.SecurityConfig;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @TODOnow : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
@@ -75,6 +78,9 @@ public class MemberController {
     @Operation(summary = "회원 수정", description = "회원 정보를 수정( 수정 가능 항목 : userPw, nickName )")
     @PostMapping("/update/{id}")
     public ResponseDTO update(@PathVariable Long id, @RequestBody MemberUpdateDTO updateDTO) {
+
+        commonUtils.validationRole(updateDTO.getUserId()); // @TODOnow userRole&id validation 필요한 부분에 적용
+
         Member updateMember = memberService.update(updateDTO);
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
     }

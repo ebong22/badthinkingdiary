@@ -5,12 +5,14 @@ import ebong.badthinkingdiary.domain.DiaryPrivate;
 import ebong.badthinkingdiary.dto.DiarySaveDTO;
 import ebong.badthinkingdiary.dto.DiaryViewDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
+import ebong.badthinkingdiary.security.JwtTokenProvider;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ public class DiaryPrivateController {
     private final DiaryPrivateService diaryPrivateService;
     private final MemberService memberService;
     private final CommonUtils commonUtils;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     /**
@@ -72,15 +75,15 @@ public class DiaryPrivateController {
      * DiaryPrivate 저장
      * @param saveDto
      * @param bindingResult
-     * @param id
+     * @param memberId
      * @return ResponseDTO
      */
     @Operation(summary = "일기 저장", description = "일기를 저장함")
-    @PostMapping("/save/{id}") // @TODO 시큐리티 : id부분 나중에 로그인된 멤버 정보 서버 안에서 가져올 수 있으면 pathVariable말고 그걸로 처리
-    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long id) {
+    @PostMapping("/save/{memberId}") // @TODO 시큐리티 : id부분 나중에 로그인된 멤버 정보 서버 안에서 가져올 수 있으면 pathVariable말고 그걸로 처리
+    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long memberId) {
         commonUtils.returnError(bindingResult);
 
-        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, id));
+        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, memberId));
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
     }
 
@@ -100,9 +103,9 @@ public class DiaryPrivateController {
      * @param saveDto
      * @return DiaryPrivate
      */
-    private DiaryPrivate diarySaveDtoToDiaryPrivate(DiarySaveDTO saveDto, Long id) {
+    private DiaryPrivate diarySaveDtoToDiaryPrivate(DiarySaveDTO saveDto, Long memberId) {
         return DiaryPrivate.builder()
-                .member(memberService.find(id)) // 나중에 dto에서 빼고 현재 로그인된 유저 정보 찾아와도 될 듯
+                .member(memberService.find(memberId)) // 나중에 dto에서 빼고 현재 로그인된 유저 정보 찾아와도 될 듯
                 .title(saveDto.getTitle())
                 .contents(saveDto.getContents())
                 .diaryDay(saveDto.getDiaryDay())

@@ -1,6 +1,8 @@
 package ebong.badthinkingdiary.utils;
 
+import ebong.badthinkingdiary.domain.RoleList;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
@@ -38,6 +40,21 @@ public class CommonUtils {
         if (bindingResult.hasErrors()) {
             log.debug("bindingResult has Errors = {}", bindingResult);
             throw new IllegalArgumentException("bindingResult has Errors");
+        }
+    }
+
+    /**
+     *
+     * @param loginId
+     */
+    public void validationRole(String loginId) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals(RoleList.ADMIN.name()));
+
+        //@TODOnow 조건 맞는지 체크
+        if (!userId.equals(loginId) && !isAdmin) {
+            throw new IllegalArgumentException("Login User != argument"); //@TODOnow 메세지 수정
         }
     }
 

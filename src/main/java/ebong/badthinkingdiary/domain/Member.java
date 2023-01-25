@@ -69,7 +69,7 @@ public class Member extends AbstractEntity{
     /**
      * 회원가입 시 계정 상태, 가입일 세팅
      */
-    public void setSignUpData(){
+    public void setSignUpData() {
         this.status     = '1';
         this.createDate = LocalDateTime.now();
     }
@@ -79,7 +79,7 @@ public class Member extends AbstractEntity{
      * @param userPw
      * @param nickName
      */
-    public void memberUpdate(String userPw, String nickName){
+    public void memberUpdate(String userPw, String nickName) {
         if (userPw != null &&  !userPw.isEmpty()) {
             this.userPw = userPw;
         }
@@ -90,9 +90,17 @@ public class Member extends AbstractEntity{
     }
 
     /**
+     * 비밀번호 세팅
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.userPw = password;
+    }
+
+    /**
      * 로그인 횟수 카운팅
      */
-    public void loginCounting(){
+    public void loginCounting() {
         loginCount++;
         if (loginCount == 5) { // @TODO now : 여기서 status 바로 0으로 업데이트 되면 그 이후 로그인이 막히게 처리 ( !1 인 계정은 로그인 불가처리)
             status = 0;

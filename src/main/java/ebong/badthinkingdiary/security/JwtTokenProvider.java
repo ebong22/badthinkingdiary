@@ -30,22 +30,22 @@ public class JwtTokenProvider {
     private final RefreshTokenRepository refreshTokenRepository;
 
     // 암호화키
-    private final String secretKey;
-    private final String secretKey4Refresh;
+    private final String SECRETKEY;
+    private final String SECRETKEY_4_REFRESH;
     // 토큰 유지시간
     private final long TOKEN_VALID_MILLISECOND;
     private final long REFRESH_TOKEN_VALID_MILLISECOND;
 
     public JwtTokenProvider( UserDetailsService userDetailsService
                             , RefreshTokenRepository refreshTokenRepository
-                            , @Value("${spring.jwt.secret}") String secretKey
-                            , @Value("${spring.jwt.secret-refresh}") String secretKey4Refresh
+                            , @Value("${spring.jwt.secret}") String secretkey
+                            , @Value("${spring.jwt.secret-refresh}") String secretkey4Refresh
                             , @Value("${spring.jwt.token-expiration-access}") String tokenExpirationAccess
                             , @Value("${spring.jwt.token-expiration-refresh}") String tokenExpirationRefresh ){
         this.userDetailsService = userDetailsService;
         this.refreshTokenRepository = refreshTokenRepository;
-        this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        this.secretKey4Refresh = Base64.getEncoder().encodeToString(secretKey4Refresh.getBytes());
+        this.SECRETKEY = Base64.getEncoder().encodeToString(secretkey.getBytes());
+        this.SECRETKEY_4_REFRESH = Base64.getEncoder().encodeToString(secretkey4Refresh.getBytes());
         this.TOKEN_VALID_MILLISECOND = Long.parseLong(tokenExpirationAccess);
         this.REFRESH_TOKEN_VALID_MILLISECOND = Long.parseLong(tokenExpirationRefresh);
     }
@@ -75,7 +75,7 @@ public class JwtTokenProvider {
      * @return encryptKey
      */
     private String getEncryptKey(char tokenType) {
-        String encryptKey = tokenType == 'A' ? secretKey : tokenType == 'R' ? secretKey4Refresh : null;
+        String encryptKey = tokenType == 'A' ? SECRETKEY : tokenType == 'R' ? SECRETKEY_4_REFRESH : null;
 
         if (encryptKey == null) {
             throw new IllegalArgumentException("Bad tokenType");
@@ -147,7 +147,7 @@ public class JwtTokenProvider {
      */
     public boolean validationToken(String jwtToken) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(SECRETKEY).parseClaimsJws(jwtToken);
             log.debug("claims = {}", claims); //@TODONOW 나중에 삭제
 
             RefreshToken refreshtoken = refreshTokenRepository.findByMember_userId(claims.getBody().getSubject())

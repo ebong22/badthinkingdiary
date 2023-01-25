@@ -55,7 +55,7 @@ public class SecurityConfig{
                                     , "/role/save/new-role"
                                     , "/member/find/*"
                                     , "/member/delete/*"
-                                    , "/member/update/*"
+//                                    , "/member/update/*"
                                     , "/diary/private/delete/*"
                                     , "/diary/public/delete/*"
                                 ).hasAuthority("ADMIN") // 인가처리할 때 이렇게 하면 됨

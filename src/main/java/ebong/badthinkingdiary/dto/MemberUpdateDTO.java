@@ -20,4 +20,8 @@ public class MemberUpdateDTO {
 
     @Schema(description = "닉네임")
     private String  nickName;
+
+    public void setUserPw(String userPw) {
+        this.userPw = userPw;
+    }
 }

@@ -68,14 +68,21 @@ public class MemberController {
     /**
      * Member 수정<br>
      * 수정가능 항목 : userPw, nickName
-     * @param id
+//     * @param id
      * @param updateDTO
      * @return ResponseDTO
      */
     @Operation(summary = "회원 수정", description = "회원 정보를 수정( 수정 가능 항목 : userPw, nickName )")
-    @PostMapping("/update/{id}")
-    public ResponseDTO update(@PathVariable Long id, @RequestBody MemberUpdateDTO updateDTO) {
-        commonUtils.validationRole(updateDTO.getUserId()); // @TODOnow userRole&id validation 필요한 부분에 적용
+//    @PostMapping("/update/{id}")
+    @PostMapping("/update")
+    public ResponseDTO update(/*@PathVariable Long id,*/ @RequestBody MemberUpdateDTO updateDTO) {
+        /**
+         * @TODOnow validation 방식 바꾸기
+         * 토큰에서 userid 가져오고
+         * pathvariable에서 요청한 id로 member를 찾아서
+         * 두 userId가 다르면 false (admin) 예외
+         */
+        commonUtils.validationRole( memberService.find(updateDTO.getId()).getUserId() ); // @TODOnow userRole&id validation 필요한 부분에 적용
 
         String updatePw = updateDTO.getUserPw();
         if (updatePw != null && !updatePw.isEmpty()) {

@@ -2,7 +2,6 @@ package ebong.badthinkingdiary.apis.member;
 
 import ebong.badthinkingdiary.apis.role.RoleService;
 import ebong.badthinkingdiary.domain.Member;
-import ebong.badthinkingdiary.domain.MemberRole;
 import ebong.badthinkingdiary.dto.MemberDTO;
 import ebong.badthinkingdiary.dto.MemberSaveDTO;
 import ebong.badthinkingdiary.dto.MemberUpdateDTO;
@@ -17,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @TODOnow : 전체적으로 response data에 member 전체를 보내주는데, 이렇게 말고 보여줄 값만 dto로 만들어서 전달 필요
@@ -50,7 +47,7 @@ public class MemberController {
         commonUtils.returnError(bindingResult);
 
         Member member = memberService.save(memberSaveDtoToMember(saveDto));
-        return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", member);
+        return new ResponseDTO(HttpStatus.OK, true, "Sign up complete", memberToMemberDto(member));
     }
 
     /**
@@ -61,8 +58,10 @@ public class MemberController {
     @Operation(summary = "회원 조회", description = "회원 id를 통해 단일 회원을 조회함")
     @GetMapping("/find/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
-        MemberDTO returnMember = memberToMemberDto(memberService.find(id), memberService.getMemberRole(id));
-        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), returnMember);
+        Member findMember = memberService.find(id);
+        commonUtils.validationRole(findMember.getUserId());
+
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberToMemberDto(findMember));
     }
 
     /**
@@ -76,12 +75,6 @@ public class MemberController {
 //    @PostMapping("/update/{id}")
     @PostMapping("/update")
     public ResponseDTO update(/*@PathVariable Long id,*/ @RequestBody MemberUpdateDTO updateDTO) {
-        /**
-         * @TODOnow validation 방식 바꾸기
-         * 토큰에서 userid 가져오고
-         * pathvariable에서 요청한 id로 member를 찾아서
-         * 두 userId가 다르면 false (admin) 예외
-         */
         commonUtils.validationRole( memberService.find(updateDTO.getId()).getUserId() ); // @TODOnow userRole&id validation 필요한 부분에 적용
 
         String updatePw = updateDTO.getUserPw();
@@ -90,7 +83,7 @@ public class MemberController {
         }
         Member updateMember = memberService.update(updateDTO);
 
-        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), updateMember);
+        return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), memberToMemberDto(updateMember));
     }
 
     /**
@@ -101,6 +94,8 @@ public class MemberController {
     @Operation(summary = "회원 삭제", description = "회원 id를 통해 단일 회원을 삭제함")
     @GetMapping("/delete/{id}")
     public ResponseDTO delete(@PathVariable Long id) {
+        commonUtils.validationRole( memberService.find(id).getUserId() );
+
         memberService.delete(id);
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), null);
     }
@@ -123,19 +118,18 @@ public class MemberController {
     /**
      * Member to MemberDto
      * @param member
-     * @param roleList
      * @return MemberDTO
      */
-    public MemberDTO memberToMemberDto(Member member, List<MemberRole> roleList) {
+    public MemberDTO memberToMemberDto(Member member) {
         return MemberDTO.builder()
-                    .id(member.getId())
-                    .userId(member.getUserId())
-                    .nickName(member.getNickName())
-                    .phoneNumber(member.getPhoneNumber())
-                    .birthDay(member.getBirthDay())
-                    .authority(roleList)
-                    .build();
+                .id(member.getId())
+                .userId(member.getUserId())
+                .nickName(member.getNickName())
+                .phoneNumber(member.getPhoneNumber())
+                .birthDay(member.getBirthDay())
+                .build();
     }
+
 
     /**
      * 비밀번호 암호화

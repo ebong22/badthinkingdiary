@@ -23,16 +23,16 @@ public class MemberDTO {
     @Schema(description = "생년월일")
     private LocalDate birthDay;
 
-    @Schema(description = "권한")
-    private Object authority;
+//    @Schema(description = "권한")
+//    private Object authority;
 
     @Builder
-    public MemberDTO(Long id, String userId, String nickName, String phoneNumber, LocalDate birthDay, Object authority) {
+    public MemberDTO(Long id, String userId, String nickName, String phoneNumber, LocalDate birthDay) {
         this.id = id;
         this.userId = userId;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.birthDay = birthDay;
-        this.authority = authority;
+//        this.authority = authority;
     }
 }

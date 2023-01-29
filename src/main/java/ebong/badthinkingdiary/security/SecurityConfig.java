@@ -54,7 +54,7 @@ public class SecurityConfig{
                     .antMatchers(   "/role/save/member-role"
                                     , "/role/save/new-role"
                                     , "/member/find/*"
-                                    , "/member/delete/*"
+//                                    , "/member/delete/*"
 //                                    , "/member/update/*"
                                     , "/diary/private/delete/*"
                                     , "/diary/public/delete/*"

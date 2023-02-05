@@ -7,7 +7,6 @@ import ebong.badthinkingdiary.domain.RoleList;
 import ebong.badthinkingdiary.dto.LoginDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
 import ebong.badthinkingdiary.dto.TokenDTO;
-import ebong.badthinkingdiary.security.JwtTokenProvider;
 import ebong.badthinkingdiary.utils.CommonUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ import java.util.List;
 @RequestMapping
 public class LoginController {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final LoginService loginService;
     private final MemberService memberService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;

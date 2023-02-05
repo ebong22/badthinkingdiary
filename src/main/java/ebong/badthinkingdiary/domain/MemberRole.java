@@ -1,6 +1,7 @@
 package ebong.badthinkingdiary.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ public class MemberRole extends AbstractEntity{
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @Builder
     public MemberRole(Member member, Role role) {
         this.member = member;
         this.role = role;

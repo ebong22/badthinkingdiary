@@ -1,6 +1,9 @@
 package ebong.badthinkingdiary.utils;
 
+import ebong.badthinkingdiary.apis.member.MemberService;
+import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.domain.RoleList;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -11,7 +14,10 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class CommonUtils {
+
+    private final MemberService memberService;
 
     /**
      * 일기 농도 계산<br>
@@ -56,6 +62,11 @@ public class CommonUtils {
         if (!userId.equals(loginId) && !isAdmin) {
             throw new IllegalArgumentException("Login User != argument"); //@TODOnow 메세지 수정
         }
+    }
+
+    public Member getLoginMember(){
+        String loginUserId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberService.find(loginUserId);
     }
 
 }

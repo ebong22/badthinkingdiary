@@ -2,6 +2,7 @@ package ebong.badthinkingdiary.apis.diaryprivate;
 
 import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.domain.DiaryPrivate;
+import ebong.badthinkingdiary.domain.Member;
 import ebong.badthinkingdiary.dto.DiarySaveDTO;
 import ebong.badthinkingdiary.dto.DiaryViewDTO;
 import ebong.badthinkingdiary.dto.ResponseDTO;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +42,8 @@ public class DiaryPrivateController {
     @Operation(summary = "일기 조회(Id)", description = "일기 id를 통해 단일 일기를 조회함")
     @GetMapping("/{id}")
     public ResponseDTO findById(@PathVariable Long id) {
+        commonUtils.validationRole( memberService.find(id).getUserId() );
+
         DiaryPrivate diary = diaryPrivateService.find(id);
         return new ResponseDTO(HttpStatus.OK, true, HttpStatus.OK.toString(), diaryPrivateToDiaryViewDto(diary));
     }
@@ -54,6 +56,8 @@ public class DiaryPrivateController {
     @Operation(summary = "일기 조회(memberId)", description = "멤버 id를 통해 멤버에 해당하는 일기 전체를 조회함")
     @GetMapping("/member/{memberId}")
     public ResponseDTO findByMemberId(@PathVariable Long memberId) {
+        commonUtils.validationRole( memberService.find(memberId).getUserId() );
+
         List<DiaryPrivate> diaryList = diaryPrivateService.findByMemberId(memberId);
 
         if (diaryList.size() > 0) {
@@ -71,19 +75,35 @@ public class DiaryPrivateController {
         throw new NoSuchElementException("diaryList empty");
     }
 
+//    /**
+//     * DiaryPrivate 저장
+//     * @param saveDto
+//     * @param bindingResult
+//     * @param memberId
+//     * @return ResponseDTO
+//     */
+//    @Operation(summary = "일기 저장", description = "일기를 저장함")
+//    @PostMapping("/save/{memberId}")
+//    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long memberId) {
+//        commonUtils.returnError(bindingResult);
+//
+//        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, memberId));
+//        return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
+//    }
+
     /**
      * DiaryPrivate 저장
      * @param saveDto
      * @param bindingResult
-     * @param memberId
      * @return ResponseDTO
      */
     @Operation(summary = "일기 저장", description = "일기를 저장함")
-    @PostMapping("/save/{memberId}") // @TODO 시큐리티 : id부분 나중에 로그인된 멤버 정보 서버 안에서 가져올 수 있으면 pathVariable말고 그걸로 처리
-    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult, @PathVariable Long memberId) {
+    @PostMapping("/save")
+    public ResponseDTO save(@Validated @RequestBody DiarySaveDTO saveDto, BindingResult bindingResult) {
         commonUtils.returnError(bindingResult);
+        Member loginMember = commonUtils.getLoginMember();
 
-        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, memberId));
+        DiaryPrivate diary = diaryPrivateService.save(diarySaveDtoToDiaryPrivate(saveDto, loginMember.getId()));
         return new ResponseDTO(HttpStatus.OK, true, "save complete", diary);
     }
 
@@ -92,9 +112,11 @@ public class DiaryPrivateController {
      * @param id
      */
     @Operation(summary = "일기 삭제", description = "일기 id를 통해 일기를 삭제함")
-    @GetMapping("/delete/{id}")
-    public ResponseDTO delete(@PathVariable Long id) {
-        diaryPrivateService.delete(id);
+    @GetMapping("/delete/{memberId}/{diaryId}")
+    public ResponseDTO delete(@PathVariable Long memberId, @RequestParam Long diaryId)  {
+        commonUtils.validationRole( memberService.find(memberId).getUserId() );
+
+        diaryPrivateService.delete(diaryId);
         return new ResponseDTO(HttpStatus.OK, true, "delete complete", null);
     }
 

@@ -1,7 +1,6 @@
-package ebong.badthinkingdiary.member;
+package ebong.badthinkingdiary.apis.member;
 
 
-import ebong.badthinkingdiary.apis.member.MemberService;
 import ebong.badthinkingdiary.domain.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 //@DataJpaTest

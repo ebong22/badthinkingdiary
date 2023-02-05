@@ -80,8 +80,7 @@ class DiaryPrivateServiceTest {
         List<DiaryPrivate> diaryPrivates = diaryPrivateService.findByDiaryDayLessThan(LocalDateTime.of(2023, 1, 21, 23, 0));
 
         assertThat(diaryPrivates).contains(diaryPrivate1, diaryPrivate2);
-        assertThat(diaryPrivates.contains(diaryPrivate3)).isEqualTo(false);
-        assertThat(diaryPrivates.contains(diaryPrivate4)).isEqualTo(false);
+        assertThat(diaryPrivates).doesNotContain(diaryPrivate3, diaryPrivate4);
     }
 
     @Test
@@ -99,35 +98,6 @@ class DiaryPrivateServiceTest {
         assertThat(diaryPrivateService.findByMemberId(member.getId()))
                 .contains(diaryPrivate1, diaryPrivate2, diaryPrivate3);
     }
-
-
-    // @TODONOW 여러 메소드 사용하는 테스트는 새로운 테스트 클래스로 분리하여 해보기
-//    @Test
-//    public void findByIdRoleUser() {
-//        /**
-//         * 회원가입
-//         * Role 부여 (USER)
-//         * 해당 아이디로 로그인
-//         * 다이어리 작성
-//         * find
-//         */
-//    }
-
-//    @Test
-//    public void findByIdRoleAdmin() {
-//        /**
-//         * 회원가입 -
-//         * Role 부여 (Admin)
-//         * 해당 아이디로 로그인 ( loginService에 login 로직 합쳐서 그걸 이용해서 해보기)
-//         * 다이어리 조회
-//         * find
-//         */
-//
-//        Member user = makeMockUser();
-//        DiaryPrivate diary = makeMockDiary(user);
-//        Member admin = makeMockAdmin();
-//    }
-
 
     private Member makeMockUser() {
         Member member = Member.builder()

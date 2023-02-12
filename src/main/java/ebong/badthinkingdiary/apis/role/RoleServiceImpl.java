@@ -33,7 +33,7 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public void saveMemberRole(MemberRole memberRole) {
+    public MemberRole saveMemberRole(MemberRole memberRole) {
         if (memberRole.getRole() == null) {
             throw new IllegalArgumentException("not exist role");
         }
@@ -47,6 +47,7 @@ public class RoleServiceImpl implements RoleService{
             }
         }
         memberRoleRepository.save(memberRole);
+        return memberRole;
     }
 
     @Override

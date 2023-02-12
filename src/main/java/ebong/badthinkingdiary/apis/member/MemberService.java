@@ -55,7 +55,7 @@ public interface MemberService {
      * @param id
      * @return
      */
-    List<MemberRole> getMemberRole(Long id);
+    List<MemberRole> getMemberRole(Long memberId);
 
     /**
      * MemberRoles to String List

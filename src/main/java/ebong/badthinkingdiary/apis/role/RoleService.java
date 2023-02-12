@@ -23,9 +23,11 @@ public interface RoleService {
 
     /**
      * MembeRole 저장
+     *
      * @param memberRole
+     * @return
      */
-    void saveMemberRole(MemberRole memberRole);
+    MemberRole saveMemberRole(MemberRole memberRole);
 
     /**
      * MemberRole 조회

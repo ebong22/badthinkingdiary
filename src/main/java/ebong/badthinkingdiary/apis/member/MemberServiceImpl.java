@@ -66,8 +66,8 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<MemberRole> getMemberRole(Long id) {
-        return memberRoleRepository.findByMemberId(id);
+    public List<MemberRole> getMemberRole(Long memberId) {
+        return memberRoleRepository.findByMemberId(memberId);
     }
 
     @Override

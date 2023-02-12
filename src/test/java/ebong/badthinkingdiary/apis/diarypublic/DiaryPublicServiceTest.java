@@ -34,7 +34,9 @@ class DiaryPublicServiceTest {
         DiaryPublic diaryPublic = makeMockDiary(LocalDateTime.now());
         DiaryPublic saveDiary = diaryPublicService.save(diaryPublic);
 
-        assertThatThrownBy(() -> diaryPublicService.delete(diaryPublic.getId()))
+        diaryPublicService.delete(diaryPublic.getId());
+
+        assertThatThrownBy(() -> diaryPublicService.findById(diaryPublic.getId()))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
